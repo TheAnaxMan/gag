@@ -80,9 +80,9 @@ unifiedPublishing {
             }
         }
 
-        if (ENV.CURSEFORGE_KEY) {
+        if (ENV.CURSE_API_KEY) {
             curseforge {
-                token = ENV.CURSEFORGE_KEY
+                token = ENV.CURSE_API_KEY
                 id = project.curseforge_id
             }
         }
