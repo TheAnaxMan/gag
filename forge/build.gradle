@@ -1,3 +1,7 @@
+plugins {
+    id 'me.shedaniel.unified-publishing'
+}
+
 architectury {
     platformSetupLoomIde()
     forge()
@@ -43,15 +47,59 @@ components.java {
     }
 }
 
+unifiedPublishing {
+    project {
+        releaseType = rootProject.artifact_type
+        gameVersions = ["1.18.2"]
+        gameLoaders = ["forge"]
+        displayName = "$mod_name Forge $project.version"
+        changelog = getGitChangelog()
+        mainPublication remapJar
+
+        relations {
+            depends {
+                curseforge = "architectury-api"
+            }
+            depends {
+                curseforge = "ftb-library"
+            }
+        }
+
+        if (ENV.CURSEFORGE_KEY) {
+            curseforge {
+                token = ENV.CURSEFORGE_KEY
+                id = project.curseforge_id
+            }
+        }
+
+        // can't use modrinth yet because of FTB Lib (TODO?: migrate to another config lib)
+        /*if (ENV.MODRINTH_TOKEN) {
+            modrinth {
+                token = ENV.MODRINTH_TOKEN
+                id = project.modrinth_id
+                version = "$project.version+$project.name"
+            }
+        }*/
+    }
+}
+
 publishing {
     publications {
         mavenForge(MavenPublication) {
-            artifactId = "${rootProject.archivesBaseName}-${project.name}"
+            artifactId = "${rootProject.archives_base_name}-${project.name}"
             from components.java
         }
     }
 
     repositories {
-        // Add repositories to publish to here.
+        if (ENV.SAPS_TOKEN) {
+            maven {
+                url "https://maven.saps.dev/minecraft"
+                credentials {
+                    username = "max"
+                    password = "${ENV.SAPS_TOKEN}"
+                }
+            }
+        }
     }
 }
