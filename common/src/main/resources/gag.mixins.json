@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "ky.someone.mods.gag.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "WanderingTraderSpawnerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1,
+    "maxShiftBy": 2
+  },
+  "minVersion": "0.8"
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "DAD",
+    " D "
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:polished_deepslate"
+    },
+    "A": {
+      "item": "minecraft:amethyst_block"
+    }
+  },
+  "result": {
+    "item": "gag:hearthstone"
+  }
+}

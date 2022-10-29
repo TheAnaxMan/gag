@@ -1,0 +1,163 @@
+package ky.someone.mods.gag.item;
+
+import ky.someone.mods.gag.GAG;
+import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.config.GAGConfig;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
+
+import static ky.someone.mods.gag.GAG.CHAT_UUID;
+import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
+import static ky.someone.mods.gag.GAGUtil.TOOLTIP_SIDENOTE;
+
+public class HearthstoneItem extends GAGItem {
+    public HearthstoneItem() {
+        super(new Properties()
+                .tab(GAG.CREATIVE_TAB)
+                .durability(GAGConfig.Hearthstone.DURABILITY.get()));
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 1;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack itemStack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int ticks) {
+        var pos = entity.position();
+
+        double radius = 0.75;
+        double spirals = 4;
+
+        // today on "max has to remember how to do simple trig"
+        for (int i = 1; i <= spirals; i++) {
+            double x = Math.cos((ticks + 2 * Math.PI * i) / spirals) * radius;
+            double z = Math.sin((ticks + 2 * Math.PI * i) / spirals) * radius;
+            level.addParticle(ParticleTypes.REVERSE_PORTAL, pos.x + x, pos.y + 0.1 * (20 - (double) ticks % 20), pos.z + z, 0, 0, 0);
+        }
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+        var stack = player.getItemInHand(interactionHand);
+        player.startUsingItem(interactionHand);
+        return InteractionResultHolder.success(stack);
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return GAGConfig.Hearthstone.WARMUP.get();
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        if (!level.isClientSide && entity instanceof ServerPlayer player) {
+            var server = player.getLevel().getServer();
+
+            boolean allowSpawn = GAGConfig.Hearthstone.ALLOW_SPAWN.get();
+            boolean ignoreSpawnBlock = GAGConfig.Hearthstone.IGNORE_SPAWN_BLOCK.get();
+            boolean useAnchorCharge = GAGConfig.Hearthstone.USE_ANCHOR_CHARGE.get();
+
+            var respawnDim = server.getLevel(player.getRespawnDimension());
+
+            if (respawnDim != null) {
+                var respawnPos = player.getRespawnPosition();
+                if (respawnPos != null) {
+                    var actualPos = Player.findRespawnPositionAndUseSpawnBlock(respawnDim, respawnPos, player.getRespawnAngle(), ignoreSpawnBlock, useAnchorCharge);
+                    if (actualPos.isPresent()) {
+                        return tryTeleport(stack, respawnDim, player, actualPos.get(), player.getRespawnAngle());
+                    }
+                }
+            } else {
+                respawnDim = server.overworld();
+            }
+
+            if (allowSpawn) {
+                var spawnPos = Vec3.atBottomCenterOf(respawnDim.getSharedSpawnPos());
+                return tryTeleport(stack, respawnDim, player, spawnPos, player.getRespawnAngle());
+            }
+
+            player.sendMessage(getTranslation("no_spawn").withStyle(ChatFormatting.RED), CHAT_UUID);
+            level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
+        }
+        return stack;
+    }
+
+    private ItemStack tryTeleport(ItemStack stack, ServerLevel level, ServerPlayer player, Vec3 pos, float yaw) {
+        var creative = player.isCreative();
+
+        var durabilityUsed = level.equals(player.getLevel()) ? 1 : GAGConfig.Hearthstone.DIMENSION_MULTIPLIER.get();
+        var distance = player.position().distanceTo(pos) * durabilityUsed;
+        var range = GAGConfig.Hearthstone.RANGE.get();
+
+        if (durabilityUsed > 0) {
+            if (range < 0 || distance < range) {
+                stack.hurtAndBreak(durabilityUsed, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
+                player.teleportTo(level, pos.x, pos.y, pos.z, yaw, 0f);
+                level.playSound(null, player.blockPosition(), SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.PLAYERS, 0.5f, 0.5f);
+
+                if (!stack.isEmpty() && !creative) {
+                    player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.Hearthstone.COOLDOWN.get());
+                }
+            } else {
+                player.sendMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED), CHAT_UUID);
+                level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
+            }
+        } else {
+            player.sendMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED), CHAT_UUID);
+            level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
+        }
+        return stack;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+        GAGUtil.appendInfoTooltip(tooltip, List.of(
+                getTranslation("info").withStyle(TOOLTIP_MAIN),
+                new TranslatableComponent("info.gag.supports_unbreaking").withStyle(TOOLTIP_SIDENOTE)
+        ));
+    }
+
+    // TODO: Pre-calculate the spawn position and show it as an on-HUD tooltip
+
+    @Override
+    public List<Component> getHoldingTooltip(Player player, ItemStack stack) {
+        return List.of(
+                getName(stack),
+                getTranslation("target", getTranslation("target.respawn").withStyle(GAGUtil.COLOUR_TRUE)).withStyle(GAGUtil.COLOUR_INFO)
+        );
+    }
+
+    @Override
+    public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
+        var totalUseTicks = getUseDuration(stack);
+        var warmupText = GAGUtil.asStyledValue(useTicks, totalUseTicks, String.format("%.2f", (totalUseTicks - useTicks) / 20d));
+        return List.of(
+                getName(stack),
+                getTranslation("target", getTranslation("target.respawn").withStyle(GAGUtil.COLOUR_TRUE)).withStyle(GAGUtil.COLOUR_INFO),
+                getTranslation("warmup", warmupText).withStyle(TOOLTIP_MAIN)
+        );
+    }
+}

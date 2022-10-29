@@ -1,0 +1,57 @@
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    accessWidenerPath = project(":common").file("src/main/resources/gag.accesswidener")
+    forge {
+        convertAccessWideners = true
+        extraAccessWideners.add("gag.accesswidener")
+        mixinConfigs "gag.mixins.json"
+    }
+}
+
+dependencies {
+    forge("net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}")
+
+    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+    modApi("dev.ftb.mods:ftb-library-forge:${ftb_lib_version}")
+
+    modLocalRuntime modCompileOnly("me.shedaniel:RoughlyEnoughItems-forge:${rootProject.rei_version}")
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    bundle(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
+}
+
+processResources {
+    def toReplace = [
+            "version"             : project.version,
+            "ftb_lib_version"     : rootProject.ftb_lib_version,
+            "architectury_version": rootProject.architectury_version
+    ]
+
+    inputs.properties toReplace
+    filesMatching("META-INF/mods.toml") {
+        expand toReplace
+    }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = "${rootProject.archivesBaseName}-${project.name}"
+            from components.java
+        }
+    }
+
+    repositories {
+        // Add repositories to publish to here.
+    }
+}

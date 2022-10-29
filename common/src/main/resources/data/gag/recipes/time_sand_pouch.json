@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GNG",
+    "LEL",
+    "LLL"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "G": {
+      "item": "minecraft:raw_gold_block"
+    },
+    "N": {
+      "item": "minecraft:nautilus_shell"
+    }
+  },
+  "result": {
+    "item": "gag:time_sand_pouch"
+  }
+}

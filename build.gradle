@@ -1,0 +1,130 @@
+plugins {
+    id 'base'
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
+    id "io.github.juuxel.loom-quiltflower" version "1.7.2" apply false
+    id "com.github.johnrengelman.shadow" version "7.0.0" apply false
+    id "com.matthewprenger.cursegradle" version "1.4.0" apply false
+    id "com.modrinth.minotaur" version "2.2.0" apply false
+}
+
+architectury {
+    compileOnly()
+}
+
+allprojects {
+    ext.ENV = System.getenv()
+
+    repositories {
+        maven {
+            url "https://maven.saps.dev/minecraft"
+            content {
+                includeGroup "dev.latvian.mods"
+                includeGroup "dev.ftb.mods"
+            }
+        }
+    }
+}
+
+version = "${mod_version}-build.${ENV.GITHUB_RUN_NUMBER ?: 9999}"
+group = project.maven_group
+base.archivesBaseName = project.archives_base_name
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: "dev.architectury.loom"
+    apply plugin: 'architectury-plugin'
+    apply plugin: "io.github.juuxel.loom-quiltflower"
+    apply plugin: "maven-publish"
+
+    version = rootProject.version
+    group = rootProject.group
+    base.archivesBaseName = rootProject.base.archivesBaseName
+
+    architectury {
+        compileOnly()
+    }
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    compileJava {
+        options.encoding = "UTF-8"
+        options.release.set(17)
+    }
+
+    java {
+        sourceCompatibility = targetCompatibility = '17'
+        withSourcesJar()
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings loom.layered() {
+            officialMojangMappings()
+        }
+    }
+}
+
+subprojects {
+    if (project.path != ':common') {
+        apply plugin: "com.github.johnrengelman.shadow"
+        apply plugin: "com.matthewprenger.cursegradle"
+        apply plugin: "com.modrinth.minotaur"
+
+        configurations {
+            bundle {
+                canBeResolved(true)
+                canBeConsumed(false)
+            }
+
+            common
+            compileClasspath.extendsFrom common
+            runtimeClasspath.extendsFrom common
+        }
+
+        jar {
+            archiveClassifier.set "dev"
+        }
+
+        shadowJar {
+            archiveClassifier.set "dev-shadow"
+            configurations = [
+                    project.configurations.bundle
+            ]
+        }
+
+        remapJar {
+            dependsOn shadowJar
+            inputFile.set shadowJar.archiveFile
+            archiveBaseName.set "${rootProject.archives_base_name}-${project.name}"
+            archiveClassifier.set null
+        }
+
+        loom {
+            mods {
+                main { // to match the default mod generated for Forge
+                    sourceSet project.sourceSets.main
+                    sourceSet project(':common').sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+task collectJars(type: Copy) {
+    subprojects {
+        if (project.path != ":common") {
+            def remapJar = project.tasks.named('remapJar')
+            dependsOn remapJar
+            from remapJar
+        }
+    }
+
+    into(buildDir.toPath().resolve("libs"))
+}
+
+assemble {
+    dependsOn(collectJars)
+}

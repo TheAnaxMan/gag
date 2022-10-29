@@ -1,0 +1,27 @@
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+
+    modApi "dev.architectury:architectury:${rootProject.architectury_version}"
+    modApi("dev.ftb.mods:ftb-library:${ftb_lib_version}")
+}
+
+architectury {
+    common("forge", "fabric")
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/gag.accesswidener")
+}
+
+publishing {
+    publications {
+        mavenCommon(MavenPublication) {
+            artifactId = rootProject.archivesBaseName
+            from components.java
+        }
+    }
+
+    repositories {
+        // Add repositories to publish to here.
+    }
+}

@@ -1,0 +1,72 @@
+def generatedResources = file("src/generated/resources")
+def accessWidenerFile = project(":common").file("src/main/resources/gag.accesswidener")
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = accessWidenerFile
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir generatedResources
+        }
+    }
+}
+
+dependencies {
+    modApi("net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}")
+    modApi("net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}")
+
+    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
+    modApi "dev.ftb.mods:ftb-library-fabric:${ftb_lib_version}"
+
+    modLocalRuntime("me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.rei_version}")
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    bundle(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+}
+
+// The AW file is needed in :fabric project resources when the game is run.
+task copyAccessWidener(type: Copy) {
+    from accessWidenerFile
+    into generatedResources
+}
+
+processResources {
+    dependsOn copyAccessWidener
+
+    def toReplace = [
+            "version"             : project.version,
+            "ftb_lib_version"     : rootProject.ftb_lib_version,
+            "architectury_version": rootProject.architectury_version
+    ]
+
+    inputs.properties toReplace
+    filesMatching("fabric.mod.json") {
+        expand toReplace
+    }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenFabric(MavenPublication) {
+            artifactId = "${rootProject.archivesBaseName}-${project.name}"
+            from components.java
+        }
+    }
+
+    repositories {
+        // Add repositories to publish to here.
+    }
+}
