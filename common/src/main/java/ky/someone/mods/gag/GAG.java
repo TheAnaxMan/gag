@@ -45,6 +45,9 @@ public class GAG {
         LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
 
         EntityEvent.LIVING_CHECK_SPAWN.register(RepellingEffect::applyRepel);
+        // This might be too aggressive, since it also blocks manual summons,
+        // but... it should be okay? See if anyone complains about it down the line lol
+        EntityEvent.ADD.register(NoSolicitorsSign::notBuyingYourStuff);
     }
 
     public void init() {
