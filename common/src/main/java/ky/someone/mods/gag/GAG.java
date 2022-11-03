@@ -11,6 +11,7 @@ import dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil;
 import ky.someone.mods.gag.block.BlockRegistry;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
 import ky.someone.mods.gag.client.GAGClient;
+import ky.someone.mods.gag.command.GAGCommands;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.effect.EffectRegistry;
 import ky.someone.mods.gag.effect.RepellingEffect;
@@ -48,6 +49,8 @@ public class GAG {
         // This might be too aggressive, since it also blocks manual summons,
         // but... it should be okay? See if anyone complains about it down the line lol
         EntityEvent.ADD.register(NoSolicitorsSign::notBuyingYourStuff);
+
+        CommandRegistrationEvent.EVENT.register(GAGCommands::register);
     }
 
     public void init() {

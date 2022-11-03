@@ -28,5 +28,7 @@
   "item.gag.sacred_balm": "Sacred Balm",
   "item.gag.sacred_salve.extra": "This lasts a bit longer than the salt, and also works in a larger area.",
   "item.gag.sacred_balm.extra": "This lasts considerably longer than the salt or salve, but also has a reduced radius.",
-  "effect.gag.repelling": "Repelling"
+  "effect.gag.repelling": "Repelling",
+  "commands.gag.give_time.success": "Successfully gave %s ticks worth of time to %s",
+  "commands.gag.give_time.no_pouch": "%s does not have a temporal pouch in their inventory!"
 }
