@@ -74,7 +74,7 @@ public class TemporalPouchItem extends GAGItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, level, entity, itemSlot, isSelected);
-        if (level.isClientSide) {
+        if (level.isClientSide || !(entity instanceof Player player) || PlayerHooks.isFake(player)) {
             return;
         }
 
@@ -89,10 +89,6 @@ public class TemporalPouchItem extends GAGItem {
         // because this is relatively expensive, only do it every 10 seconds,
         // and only on bottles that have time stored in them
         if (level.getGameTime() % (20 * 10) == 0 && getStoredGrains(stack) != 0) {
-            if (!(entity instanceof Player player) || PlayerHooks.isFake(player)) {
-                return;
-            }
-
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                 ItemStack invStack = player.getInventory().getItem(i);
                 if (invStack.getItem() == this) {
