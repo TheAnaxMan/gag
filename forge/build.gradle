@@ -60,7 +60,7 @@ if(ENV.CURSE_API_KEY) {
 
             relations {
                 requiredDependency 'architectury-api'
-                requiredDependency 'ftb-library'
+                requiredDependency 'ftb-library-forge'
             }
 
             mainArtifact(remapJar) {
