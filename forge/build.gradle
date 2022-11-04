@@ -61,7 +61,7 @@ unifiedPublishing {
                 curseforge = "architectury-api"
             }
             depends {
-                curseforge = "ftb-library"
+                curseforge = "ftb-library-forge"
             }
         }
 
