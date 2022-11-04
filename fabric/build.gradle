@@ -1,5 +1,5 @@
 plugins {
-    id 'me.shedaniel.unified-publishing'
+    id 'com.matthewprenger.cursegradle'
 }
 
 def generatedResources = file("src/generated/resources")
@@ -62,39 +62,27 @@ components.java {
     }
 }
 
-unifiedPublishing {
-    project {
-        releaseType = rootProject.artifact_type
-        gameVersions = ["1.18.2"]
-        gameLoaders = ["fabric", "quilt"]
-        displayName = "$mod_name Fabric $project.version"
-        changelog = getGitChangelog()
-        mainPublication remapJar
+if(ENV.CURSE_API_KEY) {
+    curseforge {
+        apiKey = ENV.CURSE_API_KEY
+        project {
+            id = rootProject.curseforge_id
+            changelog = getGitChangelog()
+            releaseType = rootProject.artifact_type
 
-        relations {
-            depends {
-                curseforge = "architectury-api"
+            addGameVersion '1.18.2'
+            addGameVersion 'Fabric'
+            addGameVersion 'Quilt'
+
+            relations {
+                requiredDependency 'architectury-api'
+                requiredDependency 'ftb-library'
             }
-            depends {
-                curseforge = "ftb-library-fabric"
+
+            mainArtifact(remapJar) {
+                displayName = "$mod_name Fabric $project.version"
             }
         }
-
-        if (ENV.CURSE_API_KEY) {
-            curseforge {
-                token = ENV.CURSE_API_KEY
-                id = project.curseforge_id
-            }
-        }
-
-        // can't use modrinth yet because of FTB Lib (TODO?: migrate to another config lib)
-        /*if (ENV.MODRINTH_TOKEN) {
-            modrinth {
-                token = ENV.MODRINTH_TOKEN
-                id = project.modrinth_id
-                version = "$project.version+$project.name"
-            }
-        }*/
     }
 }
 
