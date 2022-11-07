@@ -202,6 +202,8 @@ public class NoSolicitorsSign extends Block {
 
             if (state.getBlock() != BlockRegistry.NO_SOLICITORS_SIGN.get()) {
                 GAG.LOGGER.warn("No Solicitors Sign at {} does not exist, has it been removed?", wardPos);
+                GAGPointOfInterestStorage.get(serverLevel).removeIfPresent(wardPos);
+                return false;
             }
 
             var silent = state.getValue(SILENT);
