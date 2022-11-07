@@ -168,11 +168,11 @@ public class NoSolicitorsSign extends Block {
     }
 
     @Override
-    public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
-        if (level instanceof ServerLevel serverLevel) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean bl) {
+        if (!state.is(newState.getBlock()) && level instanceof ServerLevel serverLevel) {
             GAGPointOfInterestStorage.get(serverLevel).removeIfPresent(pos);
         }
-        super.destroy(level, pos, state);
+        super.onRemove(state, level, pos, newState, bl);
     }
 
     @Override
@@ -199,6 +199,11 @@ public class NoSolicitorsSign extends Block {
         if (ward.isPresent()) {
             var wardPos = ward.get();
             var state = serverLevel.getBlockState(wardPos);
+
+            if (state.getBlock() != BlockRegistry.NO_SOLICITORS_SIGN.get()) {
+                GAG.LOGGER.warn("No Solicitors Sign at {} does not exist, has it been removed?", wardPos);
+            }
+
             var silent = state.getValue(SILENT);
             if (!state.getValue(NoSolicitorsSign.SILENT)) {
                 serverLevel.playSound(null, pos, SoundEvents.WANDERING_TRADER_DEATH, SoundSource.BLOCKS, 0.2F, 0.7F);
