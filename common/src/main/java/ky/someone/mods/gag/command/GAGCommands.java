@@ -16,10 +16,10 @@ import static ky.someone.mods.gag.item.TemporalPouchItem.setStoredGrains;
 public class GAGCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
         dispatcher.register(Commands.literal("gag")
+                .requires(source -> source.hasPermission(2))
                 .then(Commands.literal("give_time")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("ticks", IntegerArgumentType.integer(0))
-                                        .requires(source -> source.hasPermission(2))
                                         .executes(ctx -> {
                                             var player = EntityArgument.getPlayer(ctx, "player");
                                             var time = IntegerArgumentType.getInteger(ctx, "ticks");
