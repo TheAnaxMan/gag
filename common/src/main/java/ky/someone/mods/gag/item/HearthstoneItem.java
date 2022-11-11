@@ -153,6 +153,7 @@ public class HearthstoneItem extends GAGItem {
     @Override
     public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
         var totalUseTicks = getUseDuration(stack);
+        useTicks = Math.min(useTicks, totalUseTicks);
         var warmupText = GAGUtil.asStyledValue(useTicks, totalUseTicks, String.format("%.2f", (totalUseTicks - useTicks) / 20d));
         return List.of(
                 getName(stack),
