@@ -1,7 +1,6 @@
 package ky.someone.mods.gag.item;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -44,9 +43,5 @@ public abstract class GAGItem extends Item {
 
     public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
         return List.of();
-    }
-
-    public final TranslatableComponent getTranslation(String sub, Object... args) {
-        return new TranslatableComponent(getDescriptionId() + "." + sub, args);
     }
 }

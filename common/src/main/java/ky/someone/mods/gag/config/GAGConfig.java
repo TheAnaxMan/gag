@@ -83,6 +83,9 @@ public interface GAGConfig {
         IntValue DURABILITY = GROUP.getInt("durability", 64, 0, Short.MAX_VALUE)
                 .comment("Maximum durability of the stone, default is 64");
 
+        IntValue energized_DURABILITY = GROUP.getInt("energizedDurability", 256, 0, Short.MAX_VALUE)
+                .comment("Maximum durability of the energized hearthstone, default is 256");
+
         IntValue RANGE = GROUP.getInt("range", -1)
                 .comment("Maximum range of the stone, set to -1 for unlimited range");
 
@@ -97,7 +100,7 @@ public interface GAGConfig {
                 .comment("Time (in ticks) the player has to wait after using the stone, default is 60 seconds");
 
         BooleanValue ALLOW_SPAWN = GROUP.getBoolean("allowSpawn", true)
-                .comment("Whether the stone should teleport a player to the spawn point if they have no respawn point");
+                .comment("Whether the stone should act a player to the spawn point if they have no respawn point");
 
         BooleanValue USE_ANCHOR_CHARGE = GROUP.getBoolean("useAnchorCharge", true)
                 .comment("Whether the stone should use a charge on the player's respawn anchor, if applicable");

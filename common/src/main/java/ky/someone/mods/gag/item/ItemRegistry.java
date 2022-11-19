@@ -18,9 +18,10 @@ public interface ItemRegistry {
 
     RegistrySupplier<Item> ESCAPE_ROPE = ITEMS.register("escape_rope", EscapeRopeItem::new);
     RegistrySupplier<Item> HEARTHSTONE = ITEMS.register("hearthstone", HearthstoneItem::new);
+    RegistrySupplier<Item> ENERGIZED_HEARTHSTONE = ITEMS.register("energized_hearthstone", EnergizedHearthstoneItem::new);
 
     RegistrySupplier<Item> SACRED_SALT = repelling("sacred_salt", p -> p.stacksTo(16).rarity(Rarity.UNCOMMON), 40 * 20, 1, false);
-    RegistrySupplier<Item> SACRED_SALVE = repelling("sacred_salve", p -> p.stacksTo(4).rarity(Rarity.RARE), 120 * 20 , 2, true);
+    RegistrySupplier<Item> SACRED_SALVE = repelling("sacred_salve", p -> p.stacksTo(4).rarity(Rarity.RARE), 120 * 20, 2, true);
     RegistrySupplier<Item> SACRED_BALM = repelling("sacred_balm", p -> p.stacksTo(4).rarity(Rarity.RARE), 360 * 20, 0, true);
 
     private static RegistrySupplier<Item> repelling(String name, UnaryOperator<Item.Properties> properties, int duration, int amplifier, boolean hasTooltip) {

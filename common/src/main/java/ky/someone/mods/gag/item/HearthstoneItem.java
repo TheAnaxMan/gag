@@ -4,9 +4,15 @@ import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -20,18 +26,22 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 import static ky.someone.mods.gag.GAG.CHAT_UUID;
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_SIDENOTE;
 
 public class HearthstoneItem extends GAGItem {
+
     public HearthstoneItem() {
+        this(GAGConfig.Hearthstone.DURABILITY.get());
+    }
+
+    public HearthstoneItem(int durability) {
         super(new Properties()
                 .tab(GAG.CREATIVE_TAB)
-                .durability(GAGConfig.Hearthstone.DURABILITY.get()));
+                .durability(durability));
     }
 
     @Override
@@ -71,23 +81,22 @@ public class HearthstoneItem extends GAGItem {
         return GAGConfig.Hearthstone.WARMUP.get();
     }
 
-    @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (!level.isClientSide && entity instanceof ServerPlayer player) {
-            var server = player.getLevel().getServer();
+    @Nullable
+    public TeleportPos getTeleportPos(Player player, ItemStack stack) {
+        boolean allowSpawn = GAGConfig.Hearthstone.ALLOW_SPAWN.get();
+        boolean ignoreSpawnBlock = GAGConfig.Hearthstone.IGNORE_SPAWN_BLOCK.get();
+        boolean useAnchorCharge = GAGConfig.Hearthstone.USE_ANCHOR_CHARGE.get();
 
-            boolean allowSpawn = GAGConfig.Hearthstone.ALLOW_SPAWN.get();
-            boolean ignoreSpawnBlock = GAGConfig.Hearthstone.IGNORE_SPAWN_BLOCK.get();
-            boolean useAnchorCharge = GAGConfig.Hearthstone.USE_ANCHOR_CHARGE.get();
-
-            var respawnDim = server.getLevel(player.getRespawnDimension());
+        if (player instanceof ServerPlayer serverPlayer) {
+            var server = serverPlayer.server;
+            var respawnDim = server.getLevel(serverPlayer.getRespawnDimension());
 
             if (respawnDim != null) {
-                var respawnPos = player.getRespawnPosition();
+                var respawnPos = serverPlayer.getRespawnPosition();
                 if (respawnPos != null) {
-                    var actualPos = Player.findRespawnPositionAndUseSpawnBlock(respawnDim, respawnPos, player.getRespawnAngle(), ignoreSpawnBlock, useAnchorCharge);
+                    var actualPos = Player.findRespawnPositionAndUseSpawnBlock(respawnDim, respawnPos, serverPlayer.getRespawnAngle(), ignoreSpawnBlock, useAnchorCharge);
                     if (actualPos.isPresent()) {
-                        return tryTeleport(stack, respawnDim, player, actualPos.get(), player.getRespawnAngle());
+                        return new TeleportPos(respawnDim.dimension().location(), actualPos.get(), serverPlayer.getRespawnAngle());
                     }
                 }
             } else {
@@ -96,10 +105,26 @@ public class HearthstoneItem extends GAGItem {
 
             if (allowSpawn) {
                 var spawnPos = Vec3.atBottomCenterOf(respawnDim.getSharedSpawnPos());
-                return tryTeleport(stack, respawnDim, player, spawnPos, player.getRespawnAngle());
+                return new TeleportPos(respawnDim.dimension().location(), spawnPos, serverPlayer.getRespawnAngle());
             }
 
-            player.sendMessage(getTranslation("no_spawn").withStyle(ChatFormatting.RED), CHAT_UUID);
+        }
+
+        return null;
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        if (!level.isClientSide && entity instanceof ServerPlayer player) {
+            var target = getTeleportPos(player, stack);
+            if (target != null) {
+                var targetLevel = target.getLevel(player.server);
+                if (targetLevel != null) {
+                    return tryTeleport(stack, targetLevel, player, target.pos, target.yaw);
+                }
+            }
+
+            player.sendMessage(getTranslation("no_target").withStyle(ChatFormatting.RED), CHAT_UUID);
             level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
         }
         return stack;
@@ -135,18 +160,20 @@ public class HearthstoneItem extends GAGItem {
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
         GAGUtil.appendInfoTooltip(tooltip, List.of(
-                getTranslation("info").withStyle(TOOLTIP_MAIN),
-                new TranslatableComponent("info.gag.supports_unbreaking").withStyle(TOOLTIP_SIDENOTE)
+                getTranslation("info").withStyle(GAGUtil.TOOLTIP_MAIN),
+                new TranslatableComponent("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
         ));
     }
 
-    // TODO: Pre-calculate the spawn position and show it as an on-HUD tooltip
+    public Component getTargetText(Player player, ItemStack stack) {
+        return getTranslation("target.bound", getTranslation("target.respawn").withStyle(GAGUtil.COLOUR_TRUE)).withStyle(GAGUtil.COLOUR_INFO);
+    }
 
     @Override
     public List<Component> getHoldingTooltip(Player player, ItemStack stack) {
         return List.of(
                 getName(stack),
-                getTranslation("target", getTranslation("target.respawn").withStyle(GAGUtil.COLOUR_TRUE)).withStyle(GAGUtil.COLOUR_INFO)
+                getTargetText(player, stack)
         );
     }
 
@@ -157,8 +184,37 @@ public class HearthstoneItem extends GAGItem {
         var warmupText = GAGUtil.asStyledValue(useTicks, totalUseTicks, String.format("%.2f", (totalUseTicks - useTicks) / 20d));
         return List.of(
                 getName(stack),
-                getTranslation("target", getTranslation("target.respawn").withStyle(GAGUtil.COLOUR_TRUE)).withStyle(GAGUtil.COLOUR_INFO),
-                getTranslation("warmup", warmupText).withStyle(TOOLTIP_MAIN)
+                getTargetText(player, stack),
+                getTranslation("warmup", warmupText).withStyle(GAGUtil.TOOLTIP_MAIN)
         );
+    }
+
+    protected TranslatableComponent getTranslation(String key, Object... args) {
+        return new TranslatableComponent("item.gag.hearthstone." + key, args);
+    }
+
+    record TeleportPos(ResourceLocation level, Vec3 pos, float yaw) {
+        static TeleportPos fromNbt(CompoundTag nbt) {
+            var level = new ResourceLocation(nbt.getString("dim"));
+            var x = nbt.getDouble("x");
+            var y = nbt.getDouble("y");
+            var z = nbt.getDouble("z");
+            return new TeleportPos(level, new Vec3(x, y, z), nbt.getFloat("yaw"));
+        }
+
+        public CompoundTag toNbt() {
+            return Util.make(new CompoundTag(), nbt -> {
+                nbt.putString("dim", level.toString());
+                nbt.putDouble("x", pos.x);
+                nbt.putDouble("y", pos.y);
+                nbt.putDouble("z", pos.z);
+                nbt.putFloat("yaw", yaw);
+            });
+        }
+
+        @Nullable
+        public ServerLevel getLevel(MinecraftServer server) {
+            return server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, level));
+        }
     }
 }
