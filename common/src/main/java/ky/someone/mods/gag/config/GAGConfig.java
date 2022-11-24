@@ -83,7 +83,7 @@ public interface GAGConfig {
         IntValue DURABILITY = GROUP.getInt("durability", 64, 0, Short.MAX_VALUE)
                 .comment("Maximum durability of the stone, default is 64");
 
-        IntValue energized_DURABILITY = GROUP.getInt("energizedDurability", 256, 0, Short.MAX_VALUE)
+        IntValue ENERGIZED_DURABILITY = GROUP.getInt("energizedDurability", 256, 0, Short.MAX_VALUE)
                 .comment("Maximum durability of the energized hearthstone, default is 256");
 
         IntValue RANGE = GROUP.getInt("range", -1)

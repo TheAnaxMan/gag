@@ -24,7 +24,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
     private static final String TARGET_KEY = "target";
 
     public EnergizedHearthstoneItem() {
-        super(GAGConfig.Hearthstone.energized_DURABILITY.get());
+        super(GAGConfig.Hearthstone.ENERGIZED_DURABILITY.get());
     }
 
     public boolean isBound(ItemStack stack) {
