@@ -100,7 +100,7 @@ public interface GAGConfig {
                 .comment("Time (in ticks) the player has to wait after using the stone, default is 60 seconds");
 
         BooleanValue ALLOW_SPAWN = GROUP.getBoolean("allowSpawn", true)
-                .comment("Whether the stone should act a player to the spawn point if they have no respawn point");
+                .comment("Whether the stone should teleport a player to the spawn point if they have no respawn point");
 
         BooleanValue USE_ANCHOR_CHARGE = GROUP.getBoolean("useAnchorCharge", true)
                 .comment("Whether the stone should use a charge on the player's respawn anchor, if applicable");
