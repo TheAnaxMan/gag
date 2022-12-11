@@ -122,6 +122,14 @@ public interface GAGConfig {
         }
     }
 
+    interface Dynamite {
+        SNBTConfig GROUP = CONFIG.getGroup("dynamite").comment("Settings related to dynamite");
+        IntValue MINING_RADIUS = GROUP.getInt("miningRadius", 7, 1, 64)
+                .comment("Radius (in blocks) of the Mining Dynamite's explosion, default is 7");
+        BooleanValue MINING_GIVES_HASTE = GROUP.getBoolean("miningGivesHaste", true)
+                .comment("Controls whether the Mining Dynamite should give the Haste status effect if it hits a player");
+    }
+
     private static int seconds(int i) {
         return i * 20;
     }

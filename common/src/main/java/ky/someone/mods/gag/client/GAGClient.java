@@ -21,6 +21,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -37,12 +38,18 @@ public interface GAGClient {
     };
 
     static void init() {
-        EntityRendererRegistry.register(EntityTypeRegistry.TIME_ACCELERATOR, TimeAcceleratorEntityRenderer::new);
+        registerEntityRenderers();
+
         ClientLifecycleEvent.CLIENT_SETUP.register(GAGClient::setup);
         ClientLifecycleEvent.CLIENT_STARTED.register(GAGClient::clientDone);
         ClientGuiEvent.RENDER_HUD.register(GAGClient::renderHUD);
 
         ParticleProviderRegistry.register(ParticleTypeRegistry.MAGIC, MagicParticle.Provider::new);
+    }
+
+    static void registerEntityRenderers() {
+        EntityRendererRegistry.register(EntityTypeRegistry.TIME_ACCELERATOR, TimeAcceleratorEntityRenderer::new);
+        EntityRendererRegistry.register(EntityTypeRegistry.MINING_DYNAMITE, ThrownItemRenderer::new);
     }
 
     static void renderHUD(PoseStack poseStack, float partialTicks) {

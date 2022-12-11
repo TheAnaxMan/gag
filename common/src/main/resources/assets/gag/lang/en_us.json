@@ -18,7 +18,7 @@
   "item.gag.hearthstone.too_weak": "It seems this hearthstone is too weak to call home from this place.",
   "item.gag.hearthstone.info": "Teleports a player to their personal spawn point, or, if enabled, the world spawn.",
   "item.gag.hearthstone.info_adv": "This hearthstone has channelled the energy of the lightning it was struck by,",
-  "item.gag.hearthstone.info_adv_2": "and can now be used to teleport to any one bound location! (shift right-click to bind)",
+  "item.gag.hearthstone.info_adv_2": "and can now be used to teleport to any one bound location! (use while sneaking to bind)",
   "item.gag.hearthstone.info_adv_3": "Note that to reset the stone later, you will need to hit it with lightning again.",
   "item.gag.hearthstone.target.bound": "Currently bound to %s",
   "item.gag.hearthstone.target.unbound": "Currently unbound",
@@ -34,6 +34,8 @@
   "item.gag.sacred_salve.extra": "This lasts a bit longer than the salt, and also works in a larger area.",
   "item.gag.sacred_balm.extra": "This lasts considerably longer than the salt or salve, but also has a reduced radius.",
   "effect.gag.repelling": "Repelling",
+  "item.gag.mining_dynamite": "Mining Grenade",
+  "item.gag.mining_dynamite.info": "Throwable explosive that has a high efficiency against stone. Drops all blocks it destroys.",
   "commands.gag.give_time.success": "Successfully gave %s ticks worth of time to %s",
   "commands.gag.give_time.no_pouch": "%s does not have a temporal pouch in their inventory!"
 }
