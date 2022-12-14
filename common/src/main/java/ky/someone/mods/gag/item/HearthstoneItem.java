@@ -82,7 +82,7 @@ public class HearthstoneItem extends GAGItem {
     }
 
     @Nullable
-    public TeleportPos getTeleportPos(Player player, ItemStack stack) {
+    public TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
         boolean allowSpawn = GAGConfig.Hearthstone.ALLOW_SPAWN.get();
         boolean ignoreSpawnBlock = GAGConfig.Hearthstone.IGNORE_SPAWN_BLOCK.get();
         boolean useAnchorCharge = GAGConfig.Hearthstone.USE_ANCHOR_CHARGE.get();

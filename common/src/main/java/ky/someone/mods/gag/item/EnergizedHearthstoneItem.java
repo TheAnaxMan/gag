@@ -32,7 +32,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
     }
 
     @Override
-    public @Nullable TeleportPos getTeleportPos(Player player, ItemStack stack) {
+    public @Nullable TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
         if (isBound(stack)) {
             return TeleportPos.fromNbt(stack.getTagElement(TARGET_KEY));
         }
@@ -42,6 +42,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(getTargetText(null, stack));
         GAGUtil.appendInfoTooltip(tooltip, List.of(
                 getTranslation("info_adv").withStyle(GAGUtil.TOOLTIP_MAIN),
                 getTranslation("info_adv_2").withStyle(GAGUtil.TOOLTIP_MAIN),
@@ -50,7 +51,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
         ));
     }
 
-    public Component getTargetText(Player player, ItemStack stack) {
+    public Component getTargetText(@Nullable Player player, ItemStack stack) {
         var target = getTeleportPos(player, stack);
 
         if (target != null) {
@@ -59,7 +60,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 
             var text = new TextComponent(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
 
-            if (!level.equals(player.level.dimension().location())) {
+            if (player == null || !level.equals(player.level.dimension().location())) {
                 text.append(" @ ").append(new TextComponent(level.toString()).withStyle(ChatFormatting.GRAY));
             }
 
