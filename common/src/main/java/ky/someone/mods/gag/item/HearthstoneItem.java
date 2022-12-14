@@ -172,7 +172,7 @@ public class HearthstoneItem extends GAGItem {
     @Override
     public List<Component> getHoldingTooltip(Player player, ItemStack stack) {
         return List.of(
-                getName(stack),
+                stack.getHoverName(),
                 getTargetText(player, stack)
         );
     }
@@ -183,7 +183,7 @@ public class HearthstoneItem extends GAGItem {
         useTicks = Math.min(useTicks, totalUseTicks);
         var warmupText = GAGUtil.asStyledValue(useTicks, totalUseTicks, String.format("%.2f", (totalUseTicks - useTicks) / 20d));
         return List.of(
-                getName(stack),
+                stack.getHoverName(),
                 getTargetText(player, stack),
                 getTranslation("warmup", warmupText).withStyle(GAGUtil.TOOLTIP_MAIN)
         );
