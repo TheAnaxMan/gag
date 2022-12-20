@@ -74,7 +74,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
         if (!isBound(stack)) {
-            if (player.isCrouching()) {
+            if (player.isShiftKeyDown()) {
                 var pos = new TeleportPos(player.level.dimension().location(), player.position(), player.getYRot());
                 stack.addTagElement(TARGET_KEY, pos.toNbt());
 
