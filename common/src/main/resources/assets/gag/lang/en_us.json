@@ -34,7 +34,7 @@
   "item.gag.sacred_salve.extra": "This lasts a bit longer than the salt, and also works in a larger area.",
   "item.gag.sacred_balm.extra": "This lasts considerably longer than the salt or salve, but also has a reduced radius.",
   "effect.gag.repelling": "Repelling",
-  "item.gag.mining_dynamite": "Mining Grenade",
+  "item.gag.mining_dynamite": "Mining Dynamite",
   "item.gag.mining_dynamite.info": "Throwable explosive that has a high efficiency against stone. Drops all blocks it destroys.",
   "commands.gag.give_time.success": "Successfully gave %s ticks worth of time to %s",
   "commands.gag.give_time.no_pouch": "%s does not have a temporal pouch in their inventory!"
