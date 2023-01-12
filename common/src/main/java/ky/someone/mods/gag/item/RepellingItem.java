@@ -18,41 +18,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RepellingItem extends GAGItem {
-    public final int duration;
-    public final int amplifier;
+	public final int duration;
+	public final int amplifier;
 
-    private final boolean addExtraTooltip;
+	private final boolean addExtraTooltip;
 
-    public RepellingItem(Properties properties, int duration, int amplifier, boolean addExtraTooltip) {
-        super(properties);
+	public RepellingItem(Properties properties, int duration, int amplifier, boolean addExtraTooltip) {
+		super(properties);
 
-        this.duration = duration;
-        this.amplifier = amplifier;
+		this.duration = duration;
+		this.amplifier = amplifier;
 
-        this.addExtraTooltip = addExtraTooltip;
-    }
+		this.addExtraTooltip = addExtraTooltip;
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-        var infoTooltips = new ArrayList<Component>();
-        // generic info tooltip
-        infoTooltips.add(new TranslatableComponent("info.gag.repelling_item").withStyle(GAGUtil.TOOLTIP_MAIN));
-        // optional item-specific tooltip
-        if (addExtraTooltip) {
-            infoTooltips.add(new TranslatableComponent(getDescriptionId() + ".extra").withStyle(GAGUtil.TOOLTIP_SIDENOTE));
-        }
-        GAGUtil.appendInfoTooltip(tooltip, infoTooltips);
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+		var infoTooltips = new ArrayList<Component>();
+		// generic info tooltip
+		infoTooltips.add(new TranslatableComponent("info.gag.repelling_item").withStyle(GAGUtil.TOOLTIP_MAIN));
+		// optional item-specific tooltip
+		if (addExtraTooltip) {
+			infoTooltips.add(new TranslatableComponent(getDescriptionId() + ".extra").withStyle(GAGUtil.TOOLTIP_SIDENOTE));
+		}
+		GAGUtil.appendInfoTooltip(tooltip, infoTooltips);
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        var hasEffect = player.hasEffect(EffectRegistry.REPELLING.get());
-        var stack = player.getItemInHand(hand);
-        if (!hasEffect) {
-            level.playSound(null, player.blockPosition(), SoundEvents.HONEYCOMB_WAX_ON, SoundSource.PLAYERS, 1.5f, 1);
-            player.addEffect(new MobEffectInstance(EffectRegistry.REPELLING.get(), duration, amplifier));
-            stack.shrink(1);
-        }
-        return hasEffect ? InteractionResultHolder.fail(stack) : InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
-    }
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		var hasEffect = player.hasEffect(EffectRegistry.REPELLING.get());
+		var stack = player.getItemInHand(hand);
+		if (!hasEffect) {
+			level.playSound(null, player.blockPosition(), SoundEvents.HONEYCOMB_WAX_ON, SoundSource.PLAYERS, 1.5f, 1);
+			player.addEffect(new MobEffectInstance(EffectRegistry.REPELLING.get(), duration, amplifier));
+			stack.shrink(1);
+		}
+		return hasEffect ? InteractionResultHolder.fail(stack) : InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+	}
 }

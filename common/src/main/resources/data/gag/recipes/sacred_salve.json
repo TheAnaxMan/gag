@@ -1,26 +1,26 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:glow_ink_sac"
-    },
-    {
-      "item": "minecraft:honey_bottle"
-    },
-    {
-      "tag": "minecraft:small_flowers"
-    },
-    {
-      "item": "gag:sacred_salt"
-    },
-    {
-      "item": "gag:sacred_salt"
-    },
-    {
-      "item": "gag:sacred_salt"
-    }
-  ],
-  "result": {
-    "item": "gag:sacred_salve"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "minecraft:glow_ink_sac"
+		},
+		{
+			"item": "minecraft:honey_bottle"
+		},
+		{
+			"tag": "minecraft:small_flowers"
+		},
+		{
+			"item": "gag:sacred_salt"
+		},
+		{
+			"item": "gag:sacred_salt"
+		},
+		{
+			"item": "gag:sacred_salt"
+		}
+	],
+	"result": {
+		"item": "gag:sacred_salve"
+	}
 }

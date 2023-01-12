@@ -1,17 +1,17 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "minecraft:signs"
-    },
-    {
-      "item": "minecraft:emerald"
-    },
-    {
-      "item": "minecraft:flint"
-    }
-  ],
-  "result": {
-    "item": "gag:no_solicitors"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"tag": "minecraft:signs"
+		},
+		{
+			"item": "minecraft:emerald"
+		},
+		{
+			"item": "minecraft:flint"
+		}
+	],
+	"result": {
+		"item": "gag:no_solicitors"
+	}
 }

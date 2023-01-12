@@ -1,48 +1,48 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    [
-      {
-        "item": "minecraft:red_mushroom"
-      },
-      {
-        "item": "minecraft:brown_mushroom"
-      },
-      {
-        "item": "minecraft:crimson_fungus"
-      },
-      {
-        "item": "minecraft:warped_fungus"
-      }
-    ],
-    {
-      "item": "minecraft:nether_wart"
-    },
-    [
-      {
-        "item": "minecraft:gunpowder"
-      },
-      {
-        "item": "minecraft:redstone"
-      },
-      {
-        "item": "minecraft:glowstone_dust"
-      }
-    ],
-    [
-      {
-        "item": "minecraft:poisonous_potato"
-      },
-      {
-        "item": "minecraft:fermented_spider_eye"
-      }
-    ],
-    {
-      "item": "minecraft:glow_berries"
-    }
-  ],
-  "result": {
-    "item": "gag:sacred_salt",
-    "count": 4
-  }
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		[
+			{
+				"item": "minecraft:red_mushroom"
+			},
+			{
+				"item": "minecraft:brown_mushroom"
+			},
+			{
+				"item": "minecraft:crimson_fungus"
+			},
+			{
+				"item": "minecraft:warped_fungus"
+			}
+		],
+		{
+			"item": "minecraft:nether_wart"
+		},
+		[
+			{
+				"item": "minecraft:gunpowder"
+			},
+			{
+				"item": "minecraft:redstone"
+			},
+			{
+				"item": "minecraft:glowstone_dust"
+			}
+		],
+		[
+			{
+				"item": "minecraft:poisonous_potato"
+			},
+			{
+				"item": "minecraft:fermented_spider_eye"
+			}
+		],
+		{
+			"item": "minecraft:glow_berries"
+		}
+	],
+	"result": {
+		"item": "gag:sacred_salt",
+		"count": 4
+	}
 }

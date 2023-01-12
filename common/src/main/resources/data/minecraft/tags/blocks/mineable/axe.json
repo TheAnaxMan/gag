@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "gag:no_solicitors"
-  ]
+	"replace": false,
+	"values": [
+		"gag:no_solicitors"
+	]
 }

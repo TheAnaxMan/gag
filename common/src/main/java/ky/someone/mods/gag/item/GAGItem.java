@@ -15,33 +15,33 @@ import java.util.List;
  * well as some general convenience methods.
  */
 public abstract class GAGItem extends Item {
-    public GAGItem(Properties properties) {
-        super(properties);
-    }
+	public GAGItem(Properties properties) {
+		super(properties);
+	}
 
-    public boolean shouldDamage(@Nullable Player player, ItemStack stack) {
-        return player == null || !player.isCreative();
-    }
+	public boolean shouldDamage(@Nullable Player player, ItemStack stack) {
+		return player == null || !player.isCreative();
+	}
 
-    public boolean shouldBob(ItemStack oldStack, ItemStack newStack) {
-        return !oldStack.equals(newStack);
-    }
+	public boolean shouldBob(ItemStack oldStack, ItemStack newStack) {
+		return !oldStack.equals(newStack);
+	}
 
-    // forge
-    public final boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return shouldBob(oldStack, newStack);
-    }
+	// forge
+	public final boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return shouldBob(oldStack, newStack);
+	}
 
-    // fabric
-    public final boolean allowNbtUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
-        return shouldBob(oldStack, newStack);
-    }
+	// fabric
+	public final boolean allowNbtUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
+		return shouldBob(oldStack, newStack);
+	}
 
-    public List<Component> getHoldingTooltip(Player player, ItemStack stack) {
-        return List.of();
-    }
+	public List<Component> getHoldingTooltip(Player player, ItemStack stack) {
+		return List.of();
+	}
 
-    public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
-        return List.of();
-    }
+	public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
+		return List.of();
+	}
 }

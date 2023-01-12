@@ -34,83 +34,83 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public interface GAGClient {
 
-    Screen DUMMY_SCREEN = new Screen(TextComponent.EMPTY) {
-    };
+	Screen DUMMY_SCREEN = new Screen(TextComponent.EMPTY) {
+	};
 
-    static void init() {
-        registerEntityRenderers();
+	static void init() {
+		registerEntityRenderers();
 
-        ClientLifecycleEvent.CLIENT_SETUP.register(GAGClient::setup);
-        ClientLifecycleEvent.CLIENT_STARTED.register(GAGClient::clientDone);
-        ClientGuiEvent.RENDER_HUD.register(GAGClient::renderHUD);
+		ClientLifecycleEvent.CLIENT_SETUP.register(GAGClient::setup);
+		ClientLifecycleEvent.CLIENT_STARTED.register(GAGClient::clientDone);
+		ClientGuiEvent.RENDER_HUD.register(GAGClient::renderHUD);
 
-        ParticleProviderRegistry.register(ParticleTypeRegistry.MAGIC, MagicParticle.Provider::new);
-    }
+		ParticleProviderRegistry.register(ParticleTypeRegistry.MAGIC, MagicParticle.Provider::new);
+	}
 
-    static void registerEntityRenderers() {
-        EntityRendererRegistry.register(EntityTypeRegistry.TIME_ACCELERATOR, TimeAcceleratorEntityRenderer::new);
-        EntityRendererRegistry.register(EntityTypeRegistry.MINING_DYNAMITE, ThrownItemRenderer::new);
-    }
+	static void registerEntityRenderers() {
+		EntityRendererRegistry.register(EntityTypeRegistry.TIME_ACCELERATOR, TimeAcceleratorEntityRenderer::new);
+		EntityRendererRegistry.register(EntityTypeRegistry.MINING_DYNAMITE, ThrownItemRenderer::new);
+	}
 
-    static void renderHUD(PoseStack poseStack, float partialTicks) {
-        var minecraft = Minecraft.getInstance();
+	static void renderHUD(PoseStack poseStack, float partialTicks) {
+		var minecraft = Minecraft.getInstance();
 
-        if (minecraft == null || minecraft.options.hideGui || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
-            return;
-        }
+		if (minecraft == null || minecraft.options.hideGui || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
+			return;
+		}
 
-        var level = minecraft.level;
-        var player = minecraft.player;
+		var level = minecraft.level;
+		var player = minecraft.player;
 
-        if (level == null || player == null) {
-            return;
-        }
+		if (level == null || player == null) {
+			return;
+		}
 
-        if (minecraft.hitResult instanceof BlockHitResult blockHit) {
-            var pos = blockHit.getBlockPos();
-            var block = level.getBlockState(pos).getBlock();
+		if (minecraft.hitResult instanceof BlockHitResult blockHit) {
+			var pos = blockHit.getBlockPos();
+			var block = level.getBlockState(pos).getBlock();
 
-            var accelerator = Iterables.getFirst(level.getEntitiesOfClass(TimeAcceleratorEntity.class, new AABB(pos)), null);
-            if (accelerator != null) {
-                var accelSpeed = accelerator.getTimesAccelerated();
-                var timeLeft = accelerator.getTicksRemaining() / 20d;
+			var accelerator = Iterables.getFirst(level.getEntitiesOfClass(TimeAcceleratorEntity.class, new AABB(pos)), null);
+			if (accelerator != null) {
+				var accelSpeed = accelerator.getTimesAccelerated();
+				var timeLeft = accelerator.getTicksRemaining() / 20d;
 
-                if (accelSpeed == 0) return;
+				if (accelSpeed == 0) return;
 
-                renderHudTooltip(poseStack, List.of(
-                        block.getName(),
-                        new TranslatableComponent("info.gag.time_sand_tooltip_mult",
-                                GAGUtil.asStyledValue(accelSpeed, GAGConfig.SandsOfTime.MAX_RATE.get(), Integer.toString(1 << accelSpeed))),
-                        new TranslatableComponent("info.gag.time_sand_tooltip_time",
-                                GAGUtil.asStyledValue(timeLeft, GAGConfig.SandsOfTime.DURATION_PER_USE.get(), String.format("%.2f", timeLeft)))
-                ));
+				renderHudTooltip(poseStack, List.of(
+						block.getName(),
+						new TranslatableComponent("info.gag.time_sand_tooltip_mult",
+								GAGUtil.asStyledValue(accelSpeed, GAGConfig.SandsOfTime.MAX_RATE.get(), Integer.toString(1 << accelSpeed))),
+						new TranslatableComponent("info.gag.time_sand_tooltip_time",
+								GAGUtil.asStyledValue(timeLeft, GAGConfig.SandsOfTime.DURATION_PER_USE.get(), String.format("%.2f", timeLeft)))
+				));
 
-                return;
-            }
-        }
+				return;
+			}
+		}
 
-        var stack = player.getUseItem();
-        List<Component> tooltip = List.of();
+		var stack = player.getUseItem();
+		List<Component> tooltip = List.of();
 
-        if (!stack.isEmpty() && stack.getItem() instanceof GAGItem item) {
-            tooltip = item.getUsingTooltip(player, stack, player.getTicksUsingItem());
-        } else if ((stack = player.getMainHandItem()).getItem() instanceof GAGItem item) {
-            tooltip = item.getHoldingTooltip(player, stack);
-        } else if ((stack = player.getOffhandItem()).getItem() instanceof GAGItem item) {
-            tooltip = item.getHoldingTooltip(player, stack);
-        }
+		if (!stack.isEmpty() && stack.getItem() instanceof GAGItem item) {
+			tooltip = item.getUsingTooltip(player, stack, player.getTicksUsingItem());
+		} else if ((stack = player.getMainHandItem()).getItem() instanceof GAGItem item) {
+			tooltip = item.getHoldingTooltip(player, stack);
+		} else if ((stack = player.getOffhandItem()).getItem() instanceof GAGItem item) {
+			tooltip = item.getHoldingTooltip(player, stack);
+		}
 
-        if (!tooltip.isEmpty()) {
-            renderHudTooltip(poseStack, tooltip);
-        }
-    }
+		if (!tooltip.isEmpty()) {
+			renderHudTooltip(poseStack, tooltip);
+		}
+	}
 
-    private static void renderHudTooltip(PoseStack poseStack, List<Component> text) {
-        var mc = Minecraft.getInstance();
-        var x = (DUMMY_SCREEN.width = mc.getWindow().getGuiScaledWidth()) / 2;
-        var y = (DUMMY_SCREEN.height = mc.getWindow().getGuiScaledHeight()) / 2;
-        DUMMY_SCREEN.renderComponentTooltip(poseStack, text, x + 10, y);
-    }
+	private static void renderHudTooltip(PoseStack poseStack, List<Component> text) {
+		var mc = Minecraft.getInstance();
+		var x = (DUMMY_SCREEN.width = mc.getWindow().getGuiScaledWidth()) / 2;
+		var y = (DUMMY_SCREEN.height = mc.getWindow().getGuiScaledHeight()) / 2;
+		DUMMY_SCREEN.renderComponentTooltip(poseStack, text, x + 10, y);
+	}
 
     /*
     private static void drawProgressBar(PoseStack poseStack, int x1, int y1, int x2, int y2, float progress) {
@@ -158,11 +158,11 @@ public interface GAGClient {
     }
      */
 
-    static void setup(Minecraft minecraft) {
-        RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
-    }
+	static void setup(Minecraft minecraft) {
+		RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
+	}
 
-    static void clientDone(Minecraft minecraft) {
-        DUMMY_SCREEN.init(minecraft, minecraft.getWindow().getGuiScaledWidth(), minecraft.getWindow().getGuiScaledHeight());
-    }
+	static void clientDone(Minecraft minecraft) {
+		DUMMY_SCREEN.init(minecraft, minecraft.getWindow().getGuiScaledWidth(), minecraft.getWindow().getGuiScaledHeight());
+	}
 }

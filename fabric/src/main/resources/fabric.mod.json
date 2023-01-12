@@ -1,27 +1,27 @@
 {
-  "schemaVersion": 1,
-  "id": "gag",
-  "version": "${version}",
-  "name": "Gadgets Against Grind",
-  "description": "A cross-platform Minecraft mod that adds various different utility items and blocks!",
-  "authors": [
-    "MaxNeedsSnacks"
-  ],
-  "license": "MIT",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "ky.someone.mods.gag.fabric.GAGFabric"
-    ]
-  },
-  "mixins": [
-    "gag.mixins.json"
-  ],
-  "accessWidener": "gag.accesswidener",
-  "depends": {
-    "fabric": "*",
-    "minecraft": ">=1.18",
-    "architectury": ">=3.4.9",
-    "ftblibrary": ">=1801.3.5-build.109"
-  }
+	"schemaVersion": 1,
+	"id": "gag",
+	"version": "${version}",
+	"name": "Gadgets Against Grind",
+	"description": "A cross-platform Minecraft mod that adds various different utility items and blocks!",
+	"authors": [
+		"MaxNeedsSnacks"
+	],
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"ky.someone.mods.gag.fabric.GAGFabric"
+		]
+	},
+	"mixins": [
+		"gag.mixins.json"
+	],
+	"accessWidener": "gag.accesswidener",
+	"depends": {
+		"fabric": "*",
+		"minecraft": ">=1.18",
+		"architectury": ">=3.4.9",
+		"ftblibrary": ">=1801.3.5-build.109"
+	}
 }
