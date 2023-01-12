@@ -7,13 +7,16 @@ import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.particle.ParticleProviderRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
+import dev.architectury.registry.menu.MenuRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.block.BlockRegistry;
 import ky.someone.mods.gag.client.render.TimeAcceleratorEntityRenderer;
+import ky.someone.mods.gag.client.screen.LabelingMenuScreen;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import ky.someone.mods.gag.item.GAGItem;
+import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import ky.someone.mods.gag.particle.client.MagicParticle;
 import net.fabricmc.api.EnvType;
@@ -112,54 +115,9 @@ public interface GAGClient {
 		DUMMY_SCREEN.renderComponentTooltip(poseStack, text, x + 10, y);
 	}
 
-    /*
-    private static void drawProgressBar(PoseStack poseStack, int x1, int y1, int x2, int y2, float progress) {
-        var matrix = poseStack.last().pose();
-
-        x1 += 2;
-        //j += 2;
-        x2 = x1 + Mth.ceil((float) (x2 - x1 - 2) * progress);
-        //l -= 2;
-
-        int tmp;
-        if (x1 < x2) {
-            tmp = x1;
-            x1 = x2;
-            x2 = tmp;
-        }
-        if (y1 < y2) {
-            tmp = y1;
-            y1 = y2;
-            y2 = tmp;
-        }
-
-        var tesselator = Tesselator.getInstance();
-        var buffer = tesselator.getBuilder();
-
-        RenderSystem.enableBlend();
-        RenderSystem.disableTexture();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-
-        buffer.vertex(matrix, x1, y2, 0).color(0xFFFFFFFF).endVertex();
-        buffer.vertex(matrix, x2, y2, 0).color(0xFFFFFFFF).endVertex();
-        buffer.vertex(matrix, x2, y1, 0).color(0xFFFFFFFF).endVertex();
-        buffer.vertex(matrix, x1, y1, 0).color(0xFFFFFFFF).endVertex();
-
-        tesselator.end();
-
-        RenderSystem.enableTexture();
-        RenderSystem.disableBlend();
-
-        int m = Mth.ceil((float) (x2 - x1 - 2) * progress);
-        GuiComponent.fill(poseStack, x1 + 2, y1 + 2, x1 + m, y2 - 2, 0xFFFFFFFF);
-    }
-     */
-
 	static void setup(Minecraft minecraft) {
 		RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
+		MenuRegistry.registerScreenFactory(MenuTypeRegistry.LABELING.get(), LabelingMenuScreen::new);
 	}
 
 	static void clientDone(Minecraft minecraft) {

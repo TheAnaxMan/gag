@@ -28,11 +28,14 @@ public interface ItemRegistry {
 	RegistrySupplier<Item> SACRED_SALVE = repelling("sacred_salve", p -> p.stacksTo(4).rarity(Rarity.RARE), 120 * 20, 2, true);
 	RegistrySupplier<Item> SACRED_BALM = repelling("sacred_balm", p -> p.stacksTo(4).rarity(Rarity.RARE), 360 * 20, 0, true);
 
+	// TODO: only downward throwing speed should be accelerated
 	RegistrySupplier<Item> MINING_DYNAMITE = dynamite("mining_dynamite", MiningDynamiteEntity::new, List.of(
 			new TranslatableComponent("item.gag.mining_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
 	), 1.5);
 	// TODO: cba to implement this right now
 	//RegistrySupplier<Item> FISHING_DYNAMITE = dynamite("fishing_dynamite", FishingGrenadeEntity::new);
+
+	RegistrySupplier<Item> LABELING_TOOL = ITEMS.register("labeling_tool", LabelingToolItem::new);
 
 	private static RegistrySupplier<Item> repelling(String name, UnaryOperator<Item.Properties> properties, int duration, int amplifier, boolean hasTooltip) {
 		return ITEMS.register(name, () -> new RepellingItem(properties.apply(new Item.Properties().tab(GAG.CREATIVE_TAB)), duration, amplifier, hasTooltip));

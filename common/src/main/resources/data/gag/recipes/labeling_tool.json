@@ -1,0 +1,25 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" ##",
+		"#SI",
+		" IC"
+	],
+	"key": {
+		"#": {
+			"item": "minecraft:paper"
+		},
+		"S": {
+			"item": "minecraft:slime_ball"
+		},
+		"I": {
+			"item": "minecraft:iron_ingot"
+		},
+		"C": {
+			"item": "minecraft:chain"
+		}
+	},
+	"result": {
+		"item": "gag:labeling_tool"
+	}
+}

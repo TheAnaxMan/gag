@@ -19,6 +19,7 @@ import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.item.ItemRegistry;
+import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -43,6 +44,7 @@ public class GAG {
 		EntityTypeRegistry.ENTITIES.register();
 		EffectRegistry.EFFECTS.register();
 		ParticleTypeRegistry.PARTICLE_TYPES.register();
+		MenuTypeRegistry.MENUS.register();
 
 		GAGConfig.init();
 		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
