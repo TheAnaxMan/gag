@@ -8,7 +8,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
 public interface ParticleTypeRegistry {
-    DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(GAGUtil.MOD_ID, Registry.PARTICLE_TYPE_REGISTRY);
+	DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(GAGUtil.MOD_ID, Registry.PARTICLE_TYPE_REGISTRY);
 
-    RegistrySupplier<SimpleParticleType> MAGIC = PARTICLE_TYPES.register("magic", () -> new SimpleParticleType(true));
+	RegistrySupplier<SimpleParticleType> MAGIC = PARTICLE_TYPES.register("magic", () -> new SimpleParticleType(true));
 }

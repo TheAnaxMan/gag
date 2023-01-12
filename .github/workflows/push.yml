@@ -2,49 +2,49 @@
 name: Build and Release (1.18.2)
 
 on:
-  push:
-    paths:
-      - '**.gradle'
-      - '**.properties'
-      - '**/src/**'
-    branches:
-      - "main"
-  workflow_dispatch:
-    inputs:
-      release:
-        description: 'Publish a new release'
-        required: true
-        default: 'false'
+    push:
+        paths:
+            - '**.gradle'
+            - '**.properties'
+            - '**/src/**'
+        branches:
+            - "main"
+    workflow_dispatch:
+        inputs:
+            release:
+                description: 'Publish a new release'
+                required: true
+                default: 'false'
 
 jobs:
-  build:
-    name: "Build and Release"
-    runs-on: ubuntu-20.04
-    if: |
-      !contains(github.event.head_commit.message, '[ci skip]')
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: 17
-          distribution: 'temurin'
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
-      - name: Setup and Build with Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build --stacktrace --no-daemon
-
-      - name: Release to Maven and CurseForge
-        uses: gradle/gradle-build-action@v2
+    build:
+        name: "Build and Release"
+        runs-on: ubuntu-20.04
         if: |
-          contains(github.event.head_commit.message, '[release]') || github.event.inputs.release == 'true'
-        env:
-          SAPS_TOKEN: ${{ secrets.SAPS_TOKEN }}
-          CURSE_API_KEY: ${{ secrets.CURSE_API_KEY }}
-        with:
-          arguments: publish curseforge --stacktrace --no-daemon
+            !contains(github.event.head_commit.message, '[ci skip]')
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Set up JDK 17
+                uses: actions/setup-java@v2
+                with:
+                    java-version: 17
+                    distribution: 'temurin'
+
+            -   name: Validate Gradle Wrapper
+                uses: gradle/wrapper-validation-action@v1
+
+            -   name: Setup and Build with Gradle
+                uses: gradle/gradle-build-action@v2
+                with:
+                    arguments: build --stacktrace --no-daemon
+
+            -   name: Release to Maven and CurseForge
+                uses: gradle/gradle-build-action@v2
+                if: |
+                    contains(github.event.head_commit.message, '[release]') || github.event.inputs.release == 'true'
+                env:
+                    SAPS_TOKEN: ${{ secrets.SAPS_TOKEN }}
+                    CURSE_API_KEY: ${{ secrets.CURSE_API_KEY }}
+                with:
+                    arguments: publish curseforge --stacktrace --no-daemon

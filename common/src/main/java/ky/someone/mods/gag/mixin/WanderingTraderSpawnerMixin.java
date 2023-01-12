@@ -17,13 +17,13 @@ import java.util.Optional;
 @Mixin(WanderingTraderSpawner.class)
 public class WanderingTraderSpawnerMixin {
 
-    @Inject(method = "spawn", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/EntityType;spawn(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/network/chat/Component;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/MobSpawnType;ZZ)Lnet/minecraft/world/entity/Entity;"
-    ), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
-    public void stopSpawn(ServerLevel serverLevel, CallbackInfoReturnable<Boolean> cir, Player _0, BlockPos _1, int _2, PoiManager _3, Optional<BlockPos> _4, BlockPos pos) {
-        if (NoSolicitorsSign.blockWandererSpawn(serverLevel, pos)) {
-            cir.setReturnValue(false);
-        }
-    }
+	@Inject(method = "spawn", at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/world/entity/EntityType;spawn(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/network/chat/Component;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/MobSpawnType;ZZ)Lnet/minecraft/world/entity/Entity;"
+	), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
+	public void stopSpawn(ServerLevel serverLevel, CallbackInfoReturnable<Boolean> cir, Player _0, BlockPos _1, int _2, PoiManager _3, Optional<BlockPos> _4, BlockPos pos) {
+		if (NoSolicitorsSign.blockWandererSpawn(serverLevel, pos)) {
+			cir.setReturnValue(false);
+		}
+	}
 }

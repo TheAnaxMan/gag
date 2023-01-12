@@ -21,98 +21,98 @@ import java.util.List;
 
 public class EnergizedHearthstoneItem extends HearthstoneItem {
 
-    private static final String TARGET_KEY = "target";
+	private static final String TARGET_KEY = "target";
 
-    public EnergizedHearthstoneItem() {
-        super(GAGConfig.Hearthstone.ENERGIZED_DURABILITY.get());
-    }
+	public EnergizedHearthstoneItem() {
+		super(GAGConfig.Hearthstone.ENERGIZED_DURABILITY.get());
+	}
 
-    public boolean isBound(ItemStack stack) {
-        return stack.getTagElement(TARGET_KEY) != null;
-    }
+	public boolean isBound(ItemStack stack) {
+		return stack.getTagElement(TARGET_KEY) != null;
+	}
 
-    @Override
-    public @Nullable TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
-        if (isBound(stack)) {
-            return TeleportPos.fromNbt(stack.getTagElement(TARGET_KEY));
-        }
+	@Override
+	public @Nullable TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
+		if (isBound(stack)) {
+			return TeleportPos.fromNbt(stack.getTagElement(TARGET_KEY));
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(getTargetText(null, stack));
-        GAGUtil.appendInfoTooltip(tooltip, List.of(
-                getTranslation("info_adv").withStyle(GAGUtil.TOOLTIP_MAIN),
-                getTranslation("info_adv_2").withStyle(GAGUtil.TOOLTIP_MAIN),
-                getTranslation("info_adv_3").withStyle(GAGUtil.TOOLTIP_MAIN),
-                new TranslatableComponent("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
-        ));
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+		tooltip.add(getTargetText(null, stack));
+		GAGUtil.appendInfoTooltip(tooltip, List.of(
+				getTranslation("info_adv").withStyle(GAGUtil.TOOLTIP_MAIN),
+				getTranslation("info_adv_2").withStyle(GAGUtil.TOOLTIP_MAIN),
+				getTranslation("info_adv_3").withStyle(GAGUtil.TOOLTIP_MAIN),
+				new TranslatableComponent("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
+		));
+	}
 
-    public Component getTargetText(@Nullable Player player, ItemStack stack) {
-        var target = getTeleportPos(player, stack);
+	public Component getTargetText(@Nullable Player player, ItemStack stack) {
+		var target = getTeleportPos(player, stack);
 
-        if (target != null) {
-            var pos = target.pos();
-            var level = target.level();
+		if (target != null) {
+			var pos = target.pos();
+			var level = target.level();
 
-            var text = new TextComponent(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
+			var text = new TextComponent(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
 
-            if (player == null || !level.equals(player.level.dimension().location())) {
-                text.append(" @ ").append(new TextComponent(level.toString()).withStyle(ChatFormatting.GRAY));
-            }
+			if (player == null || !level.equals(player.level.dimension().location())) {
+				text.append(" @ ").append(new TextComponent(level.toString()).withStyle(ChatFormatting.GRAY));
+			}
 
-            return getTranslation("target.bound", text).withStyle(GAGUtil.COLOUR_INFO);
-        }
+			return getTranslation("target.bound", text).withStyle(GAGUtil.COLOUR_INFO);
+		}
 
-        return getTranslation("target.unbound").withStyle(GAGUtil.COLOUR_FALSE);
-    }
+		return getTranslation("target.unbound").withStyle(GAGUtil.COLOUR_FALSE);
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        var stack = player.getItemInHand(hand);
-        if (!isBound(stack)) {
-            if (player.isShiftKeyDown()) {
-                var pos = new TeleportPos(player.level.dimension().location(), player.position(), player.getYRot());
-                stack.addTagElement(TARGET_KEY, pos.toNbt());
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		var stack = player.getItemInHand(hand);
+		if (!isBound(stack)) {
+			if (player.isShiftKeyDown()) {
+				var pos = new TeleportPos(player.level.dimension().location(), player.position(), player.getYRot());
+				stack.addTagElement(TARGET_KEY, pos.toNbt());
 
-                player.playSound(SoundEvents.TRIDENT_THUNDER, 0.5f, 1.25f);
-                return InteractionResultHolder.success(stack);
-            } else {
-                return InteractionResultHolder.fail(stack);
-            }
-        }
-        return super.use(level, player, hand);
-    }
+				player.playSound(SoundEvents.TRIDENT_THUNDER, 0.5f, 1.25f);
+				return InteractionResultHolder.success(stack);
+			} else {
+				return InteractionResultHolder.fail(stack);
+			}
+		}
+		return super.use(level, player, hand);
+	}
 
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return isBound(stack) ? super.getUseDuration(stack) : 0;
-    }
+	@Override
+	public int getUseDuration(ItemStack stack) {
+		return isBound(stack) ? super.getUseDuration(stack) : 0;
+	}
 
-    public static boolean lightningStrike(ItemEntity itemEntity) {
-        var stack = itemEntity.getItem();
-        if (stack.is(ItemRegistry.HEARTHSTONE.get())) {
-            var newStack = new ItemStack(ItemRegistry.ENERGIZED_HEARTHSTONE.get());
-            // damage the new stack relative to the old one
-            var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
-            newStack.setDamageValue((int) (newStack.getMaxDamage() * damage));
-            // copy enchantments over to the new stack
-            EnchantmentHelper.setEnchantments(EnchantmentHelper.getEnchantments(stack), newStack);
-            itemEntity.setItem(newStack);
-            return true;
-        } else if (stack.is(ItemRegistry.ENERGIZED_HEARTHSTONE.get())) {
-            // unbind the hearthstone first
-            stack.removeTagKey(TARGET_KEY);
-            // and repair it by up to 25% of its durability
-            var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
-            stack.setDamageValue((int) (stack.getMaxDamage() * Math.max(0, damage - 0.25)));
-            itemEntity.setInvulnerable(true);
-            return true;
-        }
+	public static boolean lightningStrike(ItemEntity itemEntity) {
+		var stack = itemEntity.getItem();
+		if (stack.is(ItemRegistry.HEARTHSTONE.get())) {
+			var newStack = new ItemStack(ItemRegistry.ENERGIZED_HEARTHSTONE.get());
+			// damage the new stack relative to the old one
+			var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
+			newStack.setDamageValue((int) (newStack.getMaxDamage() * damage));
+			// copy enchantments over to the new stack
+			EnchantmentHelper.setEnchantments(EnchantmentHelper.getEnchantments(stack), newStack);
+			itemEntity.setItem(newStack);
+			return true;
+		} else if (stack.is(ItemRegistry.ENERGIZED_HEARTHSTONE.get())) {
+			// unbind the hearthstone first
+			stack.removeTagKey(TARGET_KEY);
+			// and repair it by up to 25% of its durability
+			var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
+			stack.setDamageValue((int) (stack.getMaxDamage() * Math.max(0, damage - 0.25)));
+			itemEntity.setInvulnerable(true);
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 }

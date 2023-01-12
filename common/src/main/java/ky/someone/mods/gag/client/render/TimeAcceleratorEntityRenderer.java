@@ -6,12 +6,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class TimeAcceleratorEntityRenderer extends EntityRenderer<TimeAcceleratorEntity> {
-    public TimeAcceleratorEntityRenderer(EntityRendererProvider.Context context) {
-        super(context);
-    }
+	public TimeAcceleratorEntityRenderer(EntityRendererProvider.Context context) {
+		super(context);
+	}
 
-    @Override
-    public ResourceLocation getTextureLocation(TimeAcceleratorEntity entity) {
-        return null;
-    }
+	@Override
+	public ResourceLocation getTextureLocation(TimeAcceleratorEntity entity) {
+		return null;
+	}
 }

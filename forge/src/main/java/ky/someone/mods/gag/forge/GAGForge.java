@@ -8,8 +8,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(GAGUtil.MOD_ID)
 public class GAGForge {
-    public GAGForge() {
-        EventBuses.registerModEventBus(GAGUtil.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
-        new GAG().init();
-    }
+	public GAGForge() {
+		EventBuses.registerModEventBus(GAGUtil.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
+		new GAG().init();
+	}
 }

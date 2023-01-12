@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // TODO: fix lightning strike event in architectury!
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-    @Inject(method = "thunderHit", at = @At("HEAD"), cancellable = true)
-    public void thunderHit(ServerLevel serverLevel, LightningBolt lightningBolt, CallbackInfo ci) {
-        //noinspection ConstantValue
-        if ((Object) this instanceof ItemEntity item && EnergizedHearthstoneItem.lightningStrike(item)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "thunderHit", at = @At("HEAD"), cancellable = true)
+	public void thunderHit(ServerLevel serverLevel, LightningBolt lightningBolt, CallbackInfo ci) {
+		//noinspection ConstantValue
+		if ((Object) this instanceof ItemEntity item && EnergizedHearthstoneItem.lightningStrike(item)) {
+			ci.cancel();
+		}
+	}
 }

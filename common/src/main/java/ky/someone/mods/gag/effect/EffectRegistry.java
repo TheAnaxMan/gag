@@ -7,7 +7,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffect;
 
 public interface EffectRegistry {
-    DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(GAGUtil.MOD_ID, Registry.MOB_EFFECT_REGISTRY);
+	DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(GAGUtil.MOD_ID, Registry.MOB_EFFECT_REGISTRY);
 
-    RegistrySupplier<MobEffect> REPELLING = EFFECTS.register("repelling", RepellingEffect::new);
+	RegistrySupplier<MobEffect> REPELLING = EFFECTS.register("repelling", RepellingEffect::new);
 }

@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "gag:item/time_sand_pouch"
-    }
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "gag:item/time_sand_pouch"
+	}
 }
