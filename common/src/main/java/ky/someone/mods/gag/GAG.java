@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
+import dev.architectury.event.events.common.LightningEvent;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
@@ -16,6 +17,7 @@ import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.effect.EffectRegistry;
 import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
+import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import net.minecraft.resources.ResourceLocation;
@@ -46,6 +48,7 @@ public class GAG {
 		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
 
 		EntityEvent.LIVING_CHECK_SPAWN.register(RepellingEffect::applyRepel);
+		LightningEvent.STRIKE.register(EnergizedHearthstoneItem::lightningStrike);
 		// This might be too aggressive, since it also blocks manual summons,
 		// but... it should be okay? See if anyone complains about it down the line lol
 		EntityEvent.ADD.register(NoSolicitorsSign::notBuyingYourStuff);

@@ -8,3 +8,4 @@ accessible field net/minecraft/world/level/Explosion x D
 accessible field net/minecraft/world/level/Explosion y D
 accessible field net/minecraft/world/level/Explosion z D
 accessible field net/minecraft/world/level/Explosion damageCalculator Lnet/minecraft/world/level/ExplosionDamageCalculator;
+accessible field net/minecraft/world/entity/LightningBolt hitEntities Ljava/util/Set;
