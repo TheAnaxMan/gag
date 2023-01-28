@@ -24,14 +24,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import org.slf4j.Logger;
 
-import java.util.UUID;
-
 import static dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil.CONFIG_DIR;
 
 public class GAG {
-
-	public static final UUID CHAT_UUID = UUID.fromString("33882960-cc39-408d-9dc4-3d4056f719b2");
-
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public static final CreativeModeTab CREATIVE_TAB = CreativeTabRegistry.create(new ResourceLocation(GAGUtil.MOD_ID, GAGUtil.MOD_ID),

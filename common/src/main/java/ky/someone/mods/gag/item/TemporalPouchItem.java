@@ -9,8 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -68,7 +66,7 @@ public class TemporalPouchItem extends GAGItem {
 			}
 		}
 
-		return new TranslatableComponent("item.gag.time_sand_pouch.info.stored_grains", storedGrains, timeString);
+		return Component.translatable("item.gag.time_sand_pouch.info.stored_grains", storedGrains, timeString);
 	}
 
 	@Override
@@ -178,14 +176,14 @@ public class TemporalPouchItem extends GAGItem {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(new TextComponent("(Note: This item is subject to change in the future,")
+		tooltip.add(Component.translatable("(Note: This item is subject to change in the future,")
 				.withStyle(GAGUtil.COLOUR_TRUE));
-		tooltip.add(new TextComponent("currently it just works like a Time in A Bottle!)")
+		tooltip.add(Component.translatable("currently it just works like a Time in A Bottle!)")
 				.withStyle(GAGUtil.COLOUR_TRUE));
 
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				new TranslatableComponent("item.gag.time_sand_pouch.info.1").withStyle(TOOLTIP_MAIN),
-				new TranslatableComponent("item.gag.time_sand_pouch.info.2").withStyle(TOOLTIP_MAIN)
+				Component.translatable("item.gag.time_sand_pouch.info.1").withStyle(TOOLTIP_MAIN),
+				Component.translatable("item.gag.time_sand_pouch.info.2").withStyle(TOOLTIP_MAIN)
 		));
 
 		float hue = level == null ? 0.0F : level.getGameTime() % 1200F;

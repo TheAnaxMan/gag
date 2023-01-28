@@ -7,7 +7,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,7 +24,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.List;
 
-import static ky.someone.mods.gag.GAG.CHAT_UUID;
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_SIDENOTE;
 
@@ -90,7 +88,7 @@ public class EscapeRopeItem extends GAGItem {
 					level.playSound(null, teleportPos, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.PLAYERS, 0.5f, 1f);
 				}
 			} else {
-				player.sendMessage(new TranslatableComponent("item.gag.escape_rope.no_space").withStyle(ChatFormatting.RED), CHAT_UUID);
+				player.sendSystemMessage(Component.translatable("item.gag.escape_rope.no_space").withStyle(ChatFormatting.RED));
 				level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
 			}
 
@@ -104,8 +102,8 @@ public class EscapeRopeItem extends GAGItem {
 	@Override
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				new TranslatableComponent("item.gag.escape_rope.info").withStyle(TOOLTIP_MAIN),
-				new TranslatableComponent("info.gag.supports_unbreaking").withStyle(TOOLTIP_SIDENOTE)
+				Component.translatable("item.gag.escape_rope.info").withStyle(TOOLTIP_MAIN),
+				Component.translatable("info.gag.supports_unbreaking").withStyle(TOOLTIP_SIDENOTE)
 		));
 	}
 }

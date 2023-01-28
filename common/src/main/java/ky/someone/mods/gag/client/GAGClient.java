@@ -23,8 +23,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -34,7 +32,7 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public interface GAGClient {
 
-	Screen DUMMY_SCREEN = new Screen(TextComponent.EMPTY) {
+	Screen DUMMY_SCREEN = new Screen(Component.empty()) {
 	};
 
 	static void init() {
@@ -79,9 +77,9 @@ public interface GAGClient {
 
 				renderHudTooltip(poseStack, List.of(
 						block.getName(),
-						new TranslatableComponent("info.gag.time_sand_tooltip_mult",
+						Component.translatable("info.gag.time_sand_tooltip_mult",
 								GAGUtil.asStyledValue(accelSpeed, GAGConfig.SandsOfTime.MAX_RATE.get(), Integer.toString(1 << accelSpeed))),
-						new TranslatableComponent("info.gag.time_sand_tooltip_time",
+						Component.translatable("info.gag.time_sand_tooltip_time",
 								GAGUtil.asStyledValue(timeLeft, GAGConfig.SandsOfTime.DURATION_PER_USE.get(), String.format("%.2f", timeLeft)))
 				));
 

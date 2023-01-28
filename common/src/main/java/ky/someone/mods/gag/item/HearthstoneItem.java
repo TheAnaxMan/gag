@@ -9,7 +9,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -29,8 +29,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import static ky.someone.mods.gag.GAG.CHAT_UUID;
 
 public class HearthstoneItem extends GAGItem {
 
@@ -124,7 +122,7 @@ public class HearthstoneItem extends GAGItem {
 				}
 			}
 
-			player.sendMessage(getTranslation("no_target").withStyle(ChatFormatting.RED), CHAT_UUID);
+			player.sendSystemMessage(getTranslation("no_target").withStyle(ChatFormatting.RED));
 			level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
 		}
 		return stack;
@@ -147,11 +145,11 @@ public class HearthstoneItem extends GAGItem {
 					player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.Hearthstone.COOLDOWN.get());
 				}
 			} else {
-				player.sendMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED), CHAT_UUID);
+				player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));
 				level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
 			}
 		} else {
-			player.sendMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED), CHAT_UUID);
+			player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));
 			level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
 		}
 		return stack;
@@ -161,7 +159,7 @@ public class HearthstoneItem extends GAGItem {
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				getTranslation("info").withStyle(GAGUtil.TOOLTIP_MAIN),
-				new TranslatableComponent("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
+				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
 		));
 	}
 
@@ -189,8 +187,8 @@ public class HearthstoneItem extends GAGItem {
 		);
 	}
 
-	protected TranslatableComponent getTranslation(String key, Object... args) {
-		return new TranslatableComponent("item.gag.hearthstone." + key, args);
+	protected MutableComponent getTranslation(String key, Object... args) {
+		return Component.translatable("item.gag.hearthstone." + key, args);
 	}
 
 	record TeleportPos(ResourceLocation level, Vec3 pos, float yaw) {

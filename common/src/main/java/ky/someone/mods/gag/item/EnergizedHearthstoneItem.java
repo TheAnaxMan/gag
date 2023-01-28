@@ -4,8 +4,6 @@ import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -50,7 +48,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 				getTranslation("info_adv").withStyle(GAGUtil.TOOLTIP_MAIN),
 				getTranslation("info_adv_2").withStyle(GAGUtil.TOOLTIP_MAIN),
 				getTranslation("info_adv_3").withStyle(GAGUtil.TOOLTIP_MAIN),
-				new TranslatableComponent("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
+				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
 		));
 	}
 
@@ -61,10 +59,10 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 			var pos = target.pos();
 			var level = target.level();
 
-			var text = new TextComponent(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
+			var text = Component.translatable(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
 
 			if (player == null || !level.equals(player.level.dimension().location())) {
-				text.append(" @ ").append(new TextComponent(level.toString()).withStyle(ChatFormatting.GRAY));
+				text.append(" @ ").append(Component.translatable(level.toString()).withStyle(ChatFormatting.GRAY));
 			}
 
 			return getTranslation("target.bound", text).withStyle(GAGUtil.COLOUR_INFO);
