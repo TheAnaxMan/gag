@@ -1,12 +1,14 @@
 package ky.someone.mods.gag.item;
 
 import dev.architectury.hooks.level.entity.PlayerHooks;
+import dev.architectury.platform.Platform;
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
@@ -37,6 +39,12 @@ import static ky.someone.mods.gag.config.GAGConfig.SandsOfTime;
 
 public class TemporalPouchItem extends GAGItem {
 
+	public static final String GRAINS_NBT_KEY = "grains";
+
+	// This is the key for stored time used by TIAB Standalone,
+	//  which we want to remap to our own if the mod is not loaded
+	public static final String TIAB_STORED_KEY = "storedTime";
+
 	public static TagKey<BlockEntityType<?>> DO_NOT_ACCELERATE = TagKey.create(Registry.BLOCK_ENTITY_TYPE_REGISTRY, GAGUtil.id("do_not_accelerate"));
 
 	public TemporalPouchItem() {
@@ -50,6 +58,15 @@ public class TemporalPouchItem extends GAGItem {
 	public static void setStoredGrains(ItemStack stack, int time) {
 		int newStoredTime = Math.min(time, SandsOfTime.POUCH_CAPACITY.get());
 		stack.getOrCreateTag().putInt("grains", newStoredTime);
+	}
+
+	@Override
+	public void verifyTagAfterLoad(CompoundTag tag) {
+		super.verifyTagAfterLoad(tag);
+		if (!Platform.isModLoaded("tiab") && tag.contains(TIAB_STORED_KEY)) {
+			tag.putInt(GRAINS_NBT_KEY, tag.getInt(TIAB_STORED_KEY));
+			tag.remove(TIAB_STORED_KEY);
+		}
 	}
 
 	public MutableComponent getTimeForDisplay(ItemStack stack) {
