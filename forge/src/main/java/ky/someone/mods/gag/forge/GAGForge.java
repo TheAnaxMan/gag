@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(GAGUtil.MOD_ID)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber
 public class GAGForge {
 	public GAGForge() {
 		EventBuses.registerModEventBus(GAGUtil.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
@@ -20,7 +20,7 @@ public class GAGForge {
 	}
 
 	@SubscribeEvent
-	public void onRegistryMissingMappings(RegistryEvent.MissingMappings<Item> event) {
+	public static void onRegistryMissingMappings(RegistryEvent.MissingMappings<Item> event) {
 		// remap "tiab:time_in_a_bottle" to "gag:temporal_pouch" if TIAB Standalone is missing
 		//  (requested by people wanting to transition from TIAB Standalone to GAG)
 		for (var mapping : event.getAllMappings()) {
