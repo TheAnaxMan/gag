@@ -1,7 +1,7 @@
 package ky.someone.mods.gag.menu;
 
 import dev.ftb.mods.ftblibrary.ui.BaseContainer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -153,7 +153,7 @@ public class LabelingMenu extends BaseContainer {
 			if (StringUtils.isBlank(name)) {
 				itemStack.resetHoverName();
 			} else {
-				itemStack.setHoverName(new TextComponent(this.name));
+				itemStack.setHoverName(Component.literal(this.name));
 			}
 		}
 
@@ -173,7 +173,7 @@ public class LabelingMenu extends BaseContainer {
 					ret.resetHoverName();
 				}
 			} else if (!this.name.equals(inputStack.getHoverName().getString())) {
-				ret.setHoverName(new TextComponent(this.name));
+				ret.setHoverName(Component.literal(this.name));
 			}
 
 			this.output.setItem(0, ret);

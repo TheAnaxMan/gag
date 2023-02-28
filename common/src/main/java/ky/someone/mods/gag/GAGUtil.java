@@ -4,7 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
@@ -26,8 +25,8 @@ public interface GAGUtil {
 	static void appendInfoTooltip(List<Component> tooltip, List<Component> info) {
 		var isShift = Screen.hasShiftDown();
 
-		tooltip.add(new TextComponent("ℹ")
-				.append(new TextComponent(" (Shift)").withStyle(isShift ? ChatFormatting.DARK_GRAY : ChatFormatting.GRAY))
+		tooltip.add(Component.translatable("ℹ")
+				.append(Component.translatable(" (Shift)").withStyle(isShift ? ChatFormatting.DARK_GRAY : ChatFormatting.GRAY))
 				.withStyle(COLOUR_INFO));
 
 		if (isShift) {
@@ -36,7 +35,7 @@ public interface GAGUtil {
 	}
 
 	static Component styledBool(boolean b) {
-		return new TextComponent(b ? "✔" : "✘").withStyle(b ? COLOUR_TRUE : COLOUR_FALSE);
+		return Component.translatable(b ? "✔" : "✘").withStyle(b ? COLOUR_TRUE : COLOUR_FALSE);
 	}
 
 	// returns a new style using "parent" with a colour representing
@@ -50,7 +49,7 @@ public interface GAGUtil {
 	}
 
 	static Component asStyledValue(double value, double max, String formattedValue) {
-		return new TextComponent(formattedValue).withStyle(styledRatio(Style.EMPTY, value / max));
+		return Component.translatable(formattedValue).withStyle(styledRatio(Style.EMPTY, value / max));
 	}
 
 	static ResourceLocation id(String path) {

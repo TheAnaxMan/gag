@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -106,8 +105,8 @@ public class NoSolicitorsSign extends Block {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				new TranslatableComponent("block.gag.no_solicitors.info.1").withStyle(TOOLTIP_MAIN),
-				new TranslatableComponent("block.gag.no_solicitors.info.2").withStyle(TOOLTIP_SIDENOTE)
+				Component.translatable("block.gag.no_solicitors.info.1").withStyle(TOOLTIP_MAIN),
+				Component.translatable("block.gag.no_solicitors.info.2").withStyle(TOOLTIP_SIDENOTE)
 		));
 	}
 
@@ -160,7 +159,7 @@ public class NoSolicitorsSign extends Block {
 			state = state.cycle(SILENT);
 			level.setBlockAndUpdate(pos, state);
 			level.playSound(null, pos, SoundEvents.POWDER_SNOW_PLACE, SoundSource.BLOCKS, 0.2F, 0.7F);
-			player.displayClientMessage(new TranslatableComponent("block.gag.no_solicitors.silent",
+			player.displayClientMessage(Component.translatable("block.gag.no_solicitors.silent",
 					GAGUtil.styledBool(state.getValue(SILENT))), true);
 			return InteractionResult.sidedSuccess(level.isClientSide());
 		}

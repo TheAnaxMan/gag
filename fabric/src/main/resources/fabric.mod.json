@@ -20,8 +20,8 @@
 	"accessWidener": "gag.accesswidener",
 	"depends": {
 		"fabric": "*",
-		"minecraft": ">=1.18",
-		"architectury": ">=3.4.9",
-		"ftblibrary": ">=1801.3.5-build.109"
+		"minecraft": ">=1.19.2",
+		"architectury": ">=6.4.62",
+		"ftblibrary": ">=1902.3.11-build.166"
 	}
 }

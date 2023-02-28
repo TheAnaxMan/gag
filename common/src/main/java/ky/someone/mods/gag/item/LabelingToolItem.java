@@ -4,7 +4,6 @@ import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.menu.LabelingMenu;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -23,7 +22,7 @@ import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class LabelingToolItem extends GAGItem implements MenuProvider {
 
-	public static final Component TITLE = new TranslatableComponent("item.gag.labeling_tool.text_box");
+	public static final Component TITLE = Component.translatable("item.gag.labeling_tool.text_box");
 
 	public static final int XP_COST = 10;
 
@@ -43,7 +42,7 @@ public class LabelingToolItem extends GAGItem implements MenuProvider {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-		GAGUtil.appendInfoTooltip(tooltip, List.of(new TranslatableComponent("item.gag.labeling_tool.info").withStyle(TOOLTIP_MAIN)));
+		GAGUtil.appendInfoTooltip(tooltip, List.of(Component.translatable("item.gag.labeling_tool.info").withStyle(TOOLTIP_MAIN)));
 	}
 
 	@Override

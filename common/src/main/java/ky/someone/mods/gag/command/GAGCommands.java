@@ -4,17 +4,18 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.TemporalPouchItem;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 import static ky.someone.mods.gag.item.TemporalPouchItem.getStoredGrains;
 import static ky.someone.mods.gag.item.TemporalPouchItem.setStoredGrains;
 
 public class GAGCommands {
-	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher,CommandBuildContext commandBuildContext, Commands.CommandSelection selection) {
 		dispatcher.register(Commands.literal("gag")
 				.requires(source -> source.hasPermission(2))
 				.then(Commands.literal("give_time")
@@ -32,12 +33,12 @@ public class GAGCommands {
 													setStoredGrains(stack, newTime);
 													player.inventoryMenu.broadcastChanges();
 
-													ctx.getSource().sendSuccess(new TranslatableComponent("commands.gag.give_time.success", time, player.getDisplayName()), true);
+													ctx.getSource().sendSuccess(Component.translatable("commands.gag.give_time.success", time, player.getDisplayName()), true);
 													return 1;
 												}
 											}
 
-											ctx.getSource().sendFailure(new TranslatableComponent("commands.gag.give_time.no_pouch", player.getDisplayName()));
+											ctx.getSource().sendFailure(Component.translatable("commands.gag.give_time.no_pouch", player.getDisplayName()));
 											return 0;
 										})
 								)

@@ -7,7 +7,6 @@ import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.MiningDynamiteEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 
@@ -30,7 +29,7 @@ public interface ItemRegistry {
 
 	// TODO: only downward throwing speed should be accelerated
 	RegistrySupplier<Item> MINING_DYNAMITE = dynamite("mining_dynamite", MiningDynamiteEntity::new, List.of(
-			new TranslatableComponent("item.gag.mining_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
+			Component.translatable("item.gag.mining_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
 	), 1.5);
 	// TODO: cba to implement this right now
 	//RegistrySupplier<Item> FISHING_DYNAMITE = dynamite("fishing_dynamite", FishingGrenadeEntity::new);
