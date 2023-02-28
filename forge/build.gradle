@@ -64,7 +64,7 @@ if (ENV.CURSE_API_KEY) {
 			changelogType = 'markdown'
 			releaseType = rootProject.artifact_type
 
-			addGameVersion '1.18.2'
+			addGameVersion '1.19.2'
 			addGameVersion 'Forge'
 
 			relations {
