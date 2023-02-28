@@ -1,11 +1,11 @@
-name: Java CI (1.18.2)
+name: Java CI (1.19.2)
 
 on:
     push:
         branches:
             # main and dev versions for each mc ver here
-            - "1.18.2/main"
-            - "1.18.2/dev"
+            - "1.19.2/main"
+            - "1.19.2/dev"
     workflow_dispatch:
         inputs:
             norelease:
