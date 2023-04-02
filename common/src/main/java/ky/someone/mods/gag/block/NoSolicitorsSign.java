@@ -184,7 +184,7 @@ public class NoSolicitorsSign extends Block {
 	}
 
 	public static EventResult notBuyingYourStuff(Entity entity, Level level) {
-		if (entity.getType() == EntityType.WANDERING_TRADER && level instanceof ServerLevel serverLevel && blockWandererSpawn(serverLevel, entity.getOnPos())) {
+		if (entity.getType() == EntityType.WANDERING_TRADER && level instanceof ServerLevel serverLevel && blockWandererSpawn(serverLevel, entity.blockPosition())) {
 			return EventResult.interruptFalse();
 		}
 		return EventResult.pass();
@@ -198,6 +198,10 @@ public class NoSolicitorsSign extends Block {
 
 		if (ward.isPresent()) {
 			var wardPos = ward.get();
+
+			// shouldn't be necessary, but just in case someone decides to spawn a worldgen structure with
+			// a wandering trader *and* a no solicitors sign in it, getBlockState *might* deadlock
+			if (!serverLevel.isLoaded(wardPos)) return false;
 			var state = serverLevel.getBlockState(wardPos);
 
 			if (state.getBlock() != BlockRegistry.NO_SOLICITORS_SIGN.get()) {
