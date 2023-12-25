@@ -131,6 +131,10 @@ public interface GAGConfig {
 				.comment("Radius (in blocks) of the Mining Dynamite's explosion, default is 7");
 		BooleanValue MINING_GIVES_HASTE = GROUP.getBoolean("miningGivesHaste", true)
 				.comment("Controls whether the Mining Dynamite should give the Haste status effect if it hits a player");
+
+
+		static void init() {
+		}
 	}
 
 	private static int seconds(int i) {
@@ -143,5 +147,6 @@ public interface GAGConfig {
 		EscapeRope.init();
 		Hearthstone.init();
 		Miscellaneous.init();
+		Dynamite.init();
 	}
 }
