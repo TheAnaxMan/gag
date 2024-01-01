@@ -48,7 +48,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 				getTranslation("info_adv").withStyle(GAGUtil.TOOLTIP_MAIN),
 				getTranslation("info_adv_2").withStyle(GAGUtil.TOOLTIP_MAIN),
 				getTranslation("info_adv_3").withStyle(GAGUtil.TOOLTIP_MAIN),
-				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
+				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_EXTRA)
 		));
 	}
 

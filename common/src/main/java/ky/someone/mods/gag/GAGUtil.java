@@ -15,7 +15,8 @@ public interface GAGUtil {
 	String MOD_ID = "gag";
 
 	UnaryOperator<Style> TOOLTIP_MAIN = (style) -> style.withColor(0xfcb95b);
-	UnaryOperator<Style> TOOLTIP_SIDENOTE = (style) -> style.withColor(0x0fd1ec).withItalic(true);
+	UnaryOperator<Style> TOOLTIP_EXTRA = (style) -> style.withColor(0x0fd1ec).withItalic(true);
+	UnaryOperator<Style> TOOLTIP_FLAVOUR = (style) -> style.withColor(ChatFormatting.GRAY);
 
 	UnaryOperator<Style> COLOUR_TRUE = (style) -> style.withColor(0x4ecc8d);
 	UnaryOperator<Style> COLOUR_FALSE = (style) -> style.withColor(0xfd6d5d);
