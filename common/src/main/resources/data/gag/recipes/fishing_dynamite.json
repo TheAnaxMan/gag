@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GKG",
+    "KTK",
+    "GFG"
+  ],
+  "key": {
+    "G": [
+      {
+        "item": "minecraft:gravel"
+      },
+      {
+        "item": "minecraft:sand"
+      }
+    ],
+    "K": {
+      "item": "minecraft:dried_kelp"
+    },
+    "T": {
+      "item": "minecraft:tnt"
+    },
+    "F": {
+      "item": "minecraft:fishing_rod"
+    }
+  },
+  "result": {
+    "item": "gag:fishing_dynamite",
+    "count": 6
+  }
+}

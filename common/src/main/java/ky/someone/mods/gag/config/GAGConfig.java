@@ -1,10 +1,12 @@
 package ky.someone.mods.gag.config;
 
-import dev.ftb.mods.ftblibrary.snbt.config.BooleanValue;
-import dev.ftb.mods.ftblibrary.snbt.config.IntValue;
-import dev.ftb.mods.ftblibrary.snbt.config.SNBTConfig;
-import dev.ftb.mods.ftblibrary.snbt.config.StringListValue;
+import dev.ftb.mods.ftblibrary.config.NameMap;
+import dev.ftb.mods.ftblibrary.snbt.config.*;
 import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.entity.FishingDynamiteEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -132,6 +134,61 @@ public interface GAGConfig {
 		BooleanValue MINING_GIVES_HASTE = GROUP.getBoolean("miningGivesHaste", true)
 				.comment("Controls whether the Mining Dynamite should give the Haste status effect if it hits a player");
 
+		IntValue FISHING_RADIUS = GROUP.getInt("fishingRadius", 4, 1, 64)
+				.comment("Radius (in blocks) of the Fishing Dynamite's explosion, default is 4");
+
+		BooleanValue FISHING_INSTAKILL_FISH = GROUP.getBoolean("fishingInstakillFish", true)
+				.comment("Controls whether the Fishing Dynamite should instakill fish")
+				.comment("If false, the Fishing Dynamite will instead deal 2x damage to fish");
+
+		BooleanValue FISHING_DAMAGE_ALL = GROUP.getBoolean("fishingDamageAll", true)
+				.comment("Controls whether the Fishing Dynamite should deal damage to all entities, or only to fish");
+
+		EnumValue<TargetFilter> FISHING_TARGET_FILTER = GROUP.getEnum("fishingTargetFilter", TargetFilter.MAP)
+				.comment("Controls what entities the Fishing Dynamite should target as fish")
+				.comment("Valid values are: tag, water_animal, abstract_fish, hybrid (default)")
+				.comment("tag: Only entities with the 'gag:fishing_dynamite_fish' tag will be targeted, this includes all vanilla fish by default")
+				.comment("water_animal: Only entities that are instances of WaterAnimal will be targeted, note this *will* also include dolphins and other water animals!")
+				.comment("abstract_fish: Only entities that are instances of AbstractFish will be targeted, this might not work with some modded fish that do not extend AbstractFish")
+				.comment("hybrid: Combines the abstract_fish check with the tag filter, this is the default value since it should be the most reliable");
+
+		IntValue ADDITIONAL_FISHING_LOOT = GROUP.getInt("fishingAdditionalLoot", 5, 0, 16)
+				.comment("Describes the amount of additional fish (generated from the vanilla loot table) that may be dropped by Fishing Dynamite")
+				.comment("(This value is random and biased towards dropping less the more fish were already hit by the explosion)");
+
+		enum TargetFilter {
+			TAG {
+				@Override
+				public boolean isFish(Entity entity) {
+					return entity.getType().is(FishingDynamiteEntity.FISH_TAG);
+				}
+			},
+
+			WATER_ANIMAL {
+				@Override
+				public boolean isFish(Entity entity) {
+					return entity instanceof WaterAnimal;
+				}
+			},
+
+			ABSTRACT_FISH {
+				@Override
+				public boolean isFish(Entity entity) {
+					return entity instanceof AbstractFish;
+				}
+			},
+
+			HYBRID {
+				@Override
+				public boolean isFish(Entity entity) {
+					return TAG.isFish(entity) || ABSTRACT_FISH.isFish(entity);
+				}
+			};
+
+			public abstract boolean isFish(Entity entity);
+
+			public static final NameMap<TargetFilter> MAP = NameMap.of(TargetFilter.HYBRID, TargetFilter.values()).create();
+		}
 
 		static void init() {
 		}
