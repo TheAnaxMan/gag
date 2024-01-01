@@ -163,7 +163,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 					var cur = new BlockPos(pos).above();
 					while (level.isInWorldBounds(cur) && !level.getFluidState(cur).isEmpty()) {
 						for (var p : points) {
-							level.addParticle(ParticleTypes.BUBBLE, p.x, cur.getY() + 0.5, p.y, 0, 0.1, 0);
+							level.addParticle(ParticleTypes.BUBBLE, p.x, cur.getY() + 0.5, p.z, 0, 0.1, 0);
 						}
 						cur = cur.above();
 					}
