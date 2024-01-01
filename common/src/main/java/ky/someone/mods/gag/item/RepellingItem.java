@@ -38,7 +38,7 @@ public class RepellingItem extends GAGItem {
 		infoTooltips.add(Component.translatable("info.gag.repelling_item").withStyle(GAGUtil.TOOLTIP_MAIN));
 		// optional item-specific tooltip
 		if (addExtraTooltip) {
-			infoTooltips.add(Component.translatable(getDescriptionId() + ".extra").withStyle(GAGUtil.TOOLTIP_SIDENOTE));
+			infoTooltips.add(Component.translatable(getDescriptionId() + ".extra").withStyle(GAGUtil.TOOLTIP_EXTRA));
 		}
 		GAGUtil.appendInfoTooltip(tooltip, infoTooltips);
 	}

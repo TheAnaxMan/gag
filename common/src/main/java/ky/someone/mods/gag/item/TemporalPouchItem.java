@@ -6,6 +6,7 @@ import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -193,10 +194,11 @@ public class TemporalPouchItem extends GAGItem {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("(Note: This item is subject to change in the future,")
-				.withStyle(GAGUtil.COLOUR_TRUE));
-		tooltip.add(Component.translatable("currently it just works like a Time in A Bottle!)")
-				.withStyle(GAGUtil.COLOUR_TRUE));
+		tooltip.add(Component.literal("If I could save time in a ")
+				.append(Component.literal("bottle").withStyle(ChatFormatting.STRIKETHROUGH))
+				.append(Component.literal(" bundle..."))
+				.withStyle(GAGUtil.TOOLTIP_FLAVOUR)
+				.withStyle(ChatFormatting.ITALIC));
 
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				Component.translatable("item.gag.time_sand_pouch.info.1").withStyle(TOOLTIP_MAIN),

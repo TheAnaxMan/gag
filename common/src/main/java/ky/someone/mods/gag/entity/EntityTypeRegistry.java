@@ -22,4 +22,11 @@ public interface EntityTypeRegistry {
 					.clientTrackingRange(4)
 					.updateInterval(10)
 					.build(GAGUtil.id("mining_dynamite").toString()));
+
+	RegistrySupplier<EntityType<FishingDynamiteEntity>> FISHING_DYNAMITE =
+			ENTITIES.register("fishing_dynamite", () -> EntityType.Builder.<FishingDynamiteEntity>of(FishingDynamiteEntity::new, MobCategory.MISC)
+					.sized(0.25F, 0.25F)
+					.clientTrackingRange(4)
+					.updateInterval(10)
+					.build(GAGUtil.id("fishing_dynamite").toString()));
 }

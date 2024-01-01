@@ -8,4 +8,6 @@ public class GAGNetwork {
 	public static final SimpleNetworkManager CHANNEL = SimpleNetworkManager.create(GAGUtil.MOD_ID);
 
 	public static final MessageType LABELER_TRY_RENAME = CHANNEL.registerC2S("rename_item", LabelerTryRenamePacket::new);
+
+	public static final MessageType FISHSPLOSION = CHANNEL.registerS2C("fishsplosion", FishsplosionPacket::new);
 }

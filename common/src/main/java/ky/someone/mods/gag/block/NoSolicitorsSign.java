@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_SIDENOTE;
+import static ky.someone.mods.gag.GAGUtil.TOOLTIP_EXTRA;
 
 public class NoSolicitorsSign extends Block {
 
@@ -106,7 +106,7 @@ public class NoSolicitorsSign extends Block {
 	public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				Component.translatable("block.gag.no_solicitors.info.1").withStyle(TOOLTIP_MAIN),
-				Component.translatable("block.gag.no_solicitors.info.2").withStyle(TOOLTIP_SIDENOTE)
+				Component.translatable("block.gag.no_solicitors.info.2").withStyle(TOOLTIP_EXTRA)
 		));
 	}
 

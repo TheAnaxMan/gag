@@ -25,7 +25,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import java.util.List;
 
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_SIDENOTE;
+import static ky.someone.mods.gag.GAGUtil.TOOLTIP_EXTRA;
 
 public class EscapeRopeItem extends GAGItem {
 	public EscapeRopeItem() {
@@ -103,7 +103,7 @@ public class EscapeRopeItem extends GAGItem {
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				Component.translatable("item.gag.escape_rope.info").withStyle(TOOLTIP_MAIN),
-				Component.translatable("info.gag.supports_unbreaking").withStyle(TOOLTIP_SIDENOTE)
+				Component.translatable("info.gag.supports_unbreaking").withStyle(TOOLTIP_EXTRA)
 		));
 	}
 }

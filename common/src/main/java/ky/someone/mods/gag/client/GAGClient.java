@@ -51,6 +51,7 @@ public interface GAGClient {
 	static void registerEntityRenderers() {
 		EntityRendererRegistry.register(EntityTypeRegistry.TIME_ACCELERATOR, TimeAcceleratorEntityRenderer::new);
 		EntityRendererRegistry.register(EntityTypeRegistry.MINING_DYNAMITE, ThrownItemRenderer::new);
+		EntityRendererRegistry.register(EntityTypeRegistry.FISHING_DYNAMITE, ThrownItemRenderer::new);
 	}
 
 	static void renderHUD(PoseStack poseStack, float partialTicks) {

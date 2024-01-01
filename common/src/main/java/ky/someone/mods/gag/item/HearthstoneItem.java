@@ -159,7 +159,7 @@ public class HearthstoneItem extends GAGItem {
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				getTranslation("info").withStyle(GAGUtil.TOOLTIP_MAIN),
-				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_SIDENOTE)
+				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_EXTRA)
 		));
 	}
 

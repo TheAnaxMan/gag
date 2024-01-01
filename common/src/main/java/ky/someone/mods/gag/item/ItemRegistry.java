@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.entity.FishingDynamiteEntity;
 import ky.someone.mods.gag.entity.MiningDynamiteEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
@@ -32,7 +33,9 @@ public interface ItemRegistry {
 			Component.translatable("item.gag.mining_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
 	), 1.5);
 	// TODO: cba to implement this right now
-	//RegistrySupplier<Item> FISHING_DYNAMITE = dynamite("fishing_dynamite", FishingGrenadeEntity::new);
+	RegistrySupplier<Item> FISHING_DYNAMITE = dynamite("fishing_dynamite", FishingDynamiteEntity::new, List.of(
+			Component.translatable("item.gag.fishing_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
+	), 1.5);
 
 	RegistrySupplier<Item> LABELING_TOOL = ITEMS.register("labeling_tool", LabelingToolItem::new);
 
