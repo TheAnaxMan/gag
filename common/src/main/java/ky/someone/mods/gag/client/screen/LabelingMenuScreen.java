@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.LabelingToolItem;
+import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.menu.LabelingMenu;
 import ky.someone.mods.gag.network.LabelerTryRenamePacket;
 import net.fabricmc.api.EnvType;
@@ -14,16 +15,19 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Objects;
+
 @Environment(EnvType.CLIENT)
 public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> implements ContainerListener {
 
-	private static final boolean UNUSED_UI = false;
+	private static final boolean UNUSED_UI = true;
 
 	private static final ResourceLocation BG = GAGUtil.id("textures/gui/container/labeling_tool.png");
 
@@ -118,7 +122,7 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 		// draw background
 		this.blit(poseStack, 0, 0, 0, 0, this.imageWidth, this.imageHeight);
 
-		// pigment slot (currently unused UI)
+		// pigment slot
 		// u 0 v 166, 164x31 at (6, 40)
 		if (UNUSED_UI) {
 			this.blit(poseStack, 6, 40, 0, 166, 164, 31);
@@ -135,14 +139,45 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 		this.blit(poseStack, 134, 41, 176, 0, 18, 18);
 		this.blit(poseStack, 103, 43, 176, 18, 22, 15);
 
+		var pigmentStack = this.menu.getSlot(1).getItem();
+		if (PigmentJarItem.isNonEmptyJar(pigmentStack)) {
+			var pigment = Objects.requireNonNull(PigmentJarItem.getPigment(pigmentStack));
+
+			var ratio = pigment.amount() / (float) PigmentJarItem.MAX_AMOUNT;
+			poseStack.pushPose();
+			if (ratio > 0) {
+				// render filled pigment bar (up to 162x5, uvxy as below)
+				// tinted in the rgb of the pigment
+				var u = 1;
+				var v = 214;
+				var x = 7;
+				var y = 64;
+				var w = (int) (162 * ratio);
+				var h = 5;
+
+				var color = pigment.rgb();
+				var rf = FastColor.ARGB32.red(color) / 255f;
+				var gf = FastColor.ARGB32.green(color) / 255f;
+				var bf = FastColor.ARGB32.blue(color) / 255f;
+
+				RenderSystem.setShaderColor(rf, gf, bf, 1f);
+				this.blit(poseStack, x, y, u, v, w, h);
+			}
+			poseStack.popPose();
+		}
+
 		poseStack.popPose();
 	}
+
 
 	private void nameChanged(String name) {
 		if (!name.isEmpty()) {
 			String s = name;
 			Slot slot = this.menu.getSlot(0);
-			if (slot.hasItem() && !slot.getItem().hasCustomHoverName() && name.equals(slot.getItem().getHoverName().getString())) {
+
+			if (slot.hasItem() && !slot.getItem().hasCustomHoverName()
+					&& name.equals(slot.getItem().getHoverName().getString())
+					&& !this.menu.getSlot(1).hasItem()) {
 				s = "";
 			}
 
@@ -157,6 +192,9 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 			labelBox.setValue(stack.isEmpty() ? "" : stack.getHoverName().getString());
 			labelBox.setEditable(!stack.isEmpty());
 			this.setFocused(labelBox);
+		} else if (i == 1) {
+			// labelBox.setTextColor(PigmentJarItem.getRgbColor(stack)); // todo: does this look good?
+			nameChanged(labelBox.getValue());
 		}
 	}
 

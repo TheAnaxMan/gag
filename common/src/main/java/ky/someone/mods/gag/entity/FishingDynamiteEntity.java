@@ -134,7 +134,6 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 						if (filter.isFish(entity)) {
 							fishHit++;
 							entity.hurt(this.getDamageSource(), damage * 2);
-							damage *= 2;
 						} else if (GAGConfig.Dynamite.FISHING_DAMAGE_ALL.get()) {
 							entity.hurt(this.getDamageSource(), damage / 2);
 						}

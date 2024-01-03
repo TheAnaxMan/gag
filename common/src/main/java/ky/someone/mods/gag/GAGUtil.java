@@ -40,9 +40,10 @@ public interface GAGUtil {
 	}
 
 	// returns a new style using "parent" with a colour representing
-	// the given ratio of the range [0, 1] (0 = red, 1 = green)
+	// the given ratio of the range [0, 1] (0 = red, 1 = green (clamped at 1.5 = cyan))
 	static Style styledRatio(Style parent, double ratio) {
-		return parent.withColor(Mth.hsvToRgb((float) (ratio / 3), 1, 1));
+		var clampedRatio = Mth.clamp(ratio, 0, 1.5);
+		return parent.withColor(Mth.hsvToRgb((float) clampedRatio / 3, 1, 1));
 	}
 
 	static Component asStyledValue(double value, double max) {

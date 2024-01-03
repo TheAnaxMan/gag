@@ -32,12 +32,12 @@ public interface ItemRegistry {
 	RegistrySupplier<Item> MINING_DYNAMITE = dynamite("mining_dynamite", MiningDynamiteEntity::new, List.of(
 			Component.translatable("item.gag.mining_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
 	), 1.5);
-	// TODO: cba to implement this right now
 	RegistrySupplier<Item> FISHING_DYNAMITE = dynamite("fishing_dynamite", FishingDynamiteEntity::new, List.of(
 			Component.translatable("item.gag.fishing_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
 	), 1.5);
 
 	RegistrySupplier<Item> LABELING_TOOL = ITEMS.register("labeling_tool", LabelingToolItem::new);
+	RegistrySupplier<Item> PIGMENT_JAR = ITEMS.register("pigment_jar", PigmentJarItem::new);
 
 	private static RegistrySupplier<Item> repelling(String name, UnaryOperator<Item.Properties> properties, int duration, int amplifier, boolean hasTooltip) {
 		return ITEMS.register(name, () -> new RepellingItem(properties.apply(new Item.Properties().tab(GAG.CREATIVE_TAB)), duration, amplifier, hasTooltip));

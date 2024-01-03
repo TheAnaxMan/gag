@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gag:item/pigment_jar"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "gag:pigment_amount": 0.01
+      },
+      "model": "gag:item/pigment_jar_1"
+    },
+    {
+      "predicate": {
+        "gag:pigment_amount": 0.1
+      },
+      "model": "gag:item/pigment_jar_2"
+    },
+    {
+      "predicate": {
+        "gag:pigment_amount": 0.25
+      },
+      "model": "gag:item/pigment_jar_3"
+    },
+    {
+      "predicate": {
+        "gag:pigment_amount": 0.5
+      },
+      "model": "gag:item/pigment_jar_4"
+    },
+    {
+      "predicate": {
+        "gag:pigment_amount": 0.8
+      },
+      "model": "gag:item/pigment_jar_5"
+    }
+  ]
+}

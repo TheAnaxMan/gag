@@ -2,6 +2,7 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
+import ky.someone.mods.gag.misc.TeleportPos;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -33,7 +34,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 	}
 
 	@Override
-	public @Nullable TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
+	public TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
 		if (isBound(stack)) {
 			return TeleportPos.fromNbt(stack.getTagElement(TARGET_KEY));
 		}
