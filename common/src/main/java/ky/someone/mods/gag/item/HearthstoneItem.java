@@ -3,16 +3,11 @@ package ky.someone.mods.gag.item;
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
+import ky.someone.mods.gag.misc.TeleportPos;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -118,7 +113,7 @@ public class HearthstoneItem extends GAGItem {
 			if (target != null) {
 				var targetLevel = target.getLevel(player.server);
 				if (targetLevel != null) {
-					return tryTeleport(stack, targetLevel, player, target.pos, target.yaw);
+					return tryTeleport(stack, targetLevel, player, target.pos(), target.yaw());
 				}
 			}
 
@@ -189,30 +184,5 @@ public class HearthstoneItem extends GAGItem {
 
 	protected MutableComponent getTranslation(String key, Object... args) {
 		return Component.translatable("item.gag.hearthstone." + key, args);
-	}
-
-	record TeleportPos(ResourceLocation level, Vec3 pos, float yaw) {
-		static TeleportPos fromNbt(CompoundTag nbt) {
-			var level = new ResourceLocation(nbt.getString("dim"));
-			var x = nbt.getDouble("x");
-			var y = nbt.getDouble("y");
-			var z = nbt.getDouble("z");
-			return new TeleportPos(level, new Vec3(x, y, z), nbt.getFloat("yaw"));
-		}
-
-		public CompoundTag toNbt() {
-			return Util.make(new CompoundTag(), nbt -> {
-				nbt.putString("dim", level.toString());
-				nbt.putDouble("x", pos.x);
-				nbt.putDouble("y", pos.y);
-				nbt.putDouble("z", pos.z);
-				nbt.putFloat("yaw", yaw);
-			});
-		}
-
-		@Nullable
-		public ServerLevel getLevel(MinecraftServer server) {
-			return server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, level));
-		}
 	}
 }

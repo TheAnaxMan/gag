@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "gag:pigment_jar"
+    }
+  ],
+  "result": {
+    "item": "minecraft:glass_bottle"
+  }
+}

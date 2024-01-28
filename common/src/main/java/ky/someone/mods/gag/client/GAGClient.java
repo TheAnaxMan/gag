@@ -6,7 +6,9 @@ import dev.architectury.event.events.client.ClientGuiEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.particle.ParticleProviderRegistry;
+import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
+import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.block.BlockRegistry;
@@ -16,6 +18,8 @@ import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import ky.someone.mods.gag.item.GAGItem;
+import ky.someone.mods.gag.item.ItemRegistry;
+import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import ky.someone.mods.gag.particle.client.MagicParticle;
@@ -55,20 +59,20 @@ public interface GAGClient {
 	}
 
 	static void renderHUD(PoseStack poseStack, float partialTicks) {
-		var minecraft = Minecraft.getInstance();
+		var mc = Minecraft.getInstance();
 
-		if (minecraft == null || minecraft.options.hideGui || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
+		if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR) {
 			return;
 		}
 
-		var level = minecraft.level;
-		var player = minecraft.player;
+		var level = mc.level;
+		var player = mc.player;
 
 		if (level == null || player == null) {
 			return;
 		}
 
-		if (minecraft.hitResult instanceof BlockHitResult blockHit) {
+		if (mc.hitResult instanceof BlockHitResult blockHit) {
 			var pos = blockHit.getBlockPos();
 			var block = level.getBlockState(pos).getBlock();
 
@@ -117,6 +121,11 @@ public interface GAGClient {
 	static void setup(Minecraft minecraft) {
 		RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
 		MenuRegistry.registerScreenFactory(MenuTypeRegistry.LABELING.get(), LabelingMenuScreen::new);
+
+		ColorHandlerRegistry.registerItemColors((stack, index) -> index == 0 ? PigmentJarItem.getRgbColor(stack) : -1, ItemRegistry.PIGMENT_JAR.get());
+
+		ItemPropertiesRegistry.register(ItemRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"),
+				(stack, level, entity, seed) -> PigmentJarItem.getColorAmount(stack) / (float) PigmentJarItem.MAX_AMOUNT);
 	}
 
 	static void clientDone(Minecraft minecraft) {

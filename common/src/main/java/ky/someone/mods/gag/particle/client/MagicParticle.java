@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class MagicParticle extends TextureSheetParticle {
 
-	float origSize;
+	final float origSize;
 
 	public MagicParticle(ClientLevel worldIn, double x, double y, double z, SpriteSet sprite) {
 		super(worldIn, x, y, z, 0, 0, 0);

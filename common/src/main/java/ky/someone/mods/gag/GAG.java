@@ -21,6 +21,7 @@ import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
+import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ public class GAG {
 		EffectRegistry.EFFECTS.register();
 		ParticleTypeRegistry.PARTICLE_TYPES.register();
 		MenuTypeRegistry.MENUS.register();
+		GAGRecipeSerializers.RECIPE_SERIALIZERS.register();
 
 		GAGConfig.init();
 		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
