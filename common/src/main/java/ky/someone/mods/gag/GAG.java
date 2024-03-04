@@ -20,6 +20,7 @@ import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
+import ky.someone.mods.gag.network.GAGNetwork;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -56,6 +57,7 @@ public class GAG {
 		EntityEvent.ADD.register(NoSolicitorsSign::notBuyingYourStuff);
 
 		CommandRegistrationEvent.EVENT.register(GAGCommands::register);
+		LifecycleEvent.SETUP.register(GAGNetwork::init);
 	}
 
 	public void init() {
