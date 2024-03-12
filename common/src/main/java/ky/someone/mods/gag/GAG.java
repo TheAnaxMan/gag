@@ -40,15 +40,16 @@ public class GAG {
 			() -> ItemRegistry.HEARTHSTONE.get().getDefaultInstance());
 
 	public GAG() {
+		// curiously, our config needs to be loaded first
+		// because items and such will register immediately on Fabric
+		ConfigUtil.loadDefaulted(GAGConfig.init(), CONFIG_DIR, GAGUtil.MOD_ID);
+
 		BlockRegistry.BLOCKS.register();
 		ItemRegistry.ITEMS.register();
 		EntityTypeRegistry.ENTITIES.register();
 		EffectRegistry.EFFECTS.register();
 		ParticleTypeRegistry.PARTICLE_TYPES.register();
 		MenuTypeRegistry.MENUS.register();
-
-		GAGConfig.init();
-		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
 
 		EntityEvent.LIVING_CHECK_SPAWN.register(RepellingEffect::applyRepel);
 		LightningEvent.STRIKE.register(EnergizedHearthstoneItem::lightningStrike);

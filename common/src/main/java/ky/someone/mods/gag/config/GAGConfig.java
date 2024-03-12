@@ -118,9 +118,6 @@ public interface GAGConfig {
 		IntValue NO_SOLICITORS_RADIUS = GROUP.getInt("noSolicitorsRadius", 64, 1, 512)
 				.comment("Radius (in blocks) in which the 'No Solicitors!' sign will stop Wandering Traders from spawning, default is 32");
 
-		IntValue LABELING_TOOL_CHARGES = GROUP.getInt("labelingToolCharges", 8, 1, Byte.MAX_VALUE)
-				.comment("Maximum number of charges the Labeling Tool can hold, default is 8");
-
 		static void init() {
 		}
 	}
@@ -138,10 +135,12 @@ public interface GAGConfig {
 	}
 
 	// gotta love classloading!
-	static void init() {
+	static SNBTConfig init() {
 		SandsOfTime.init();
 		EscapeRope.init();
 		Hearthstone.init();
 		Miscellaneous.init();
+
+		return CONFIG;
 	}
 }
