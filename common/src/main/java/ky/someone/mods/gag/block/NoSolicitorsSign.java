@@ -26,7 +26,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -45,8 +50,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_EXTRA;
+import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class NoSolicitorsSign extends Block {
 
@@ -183,8 +188,12 @@ public class NoSolicitorsSign extends Block {
 	}
 
 	public static EventResult notBuyingYourStuff(Entity entity, Level level) {
-		if (entity.getType() == EntityType.WANDERING_TRADER && level instanceof ServerLevel serverLevel && blockWandererSpawn(serverLevel, entity.blockPosition())) {
-			return EventResult.interruptFalse();
+		var type = entity.getType();
+		if ((type == EntityType.WANDERING_TRADER || type == EntityType.TRADER_LLAMA)
+		    && level instanceof ServerLevel serverLevel) {
+			if (blockWandererSpawn(serverLevel, entity.getOnPos())) {
+				return EventResult.interruptFalse();
+			}
 		}
 		return EventResult.pass();
 	}
